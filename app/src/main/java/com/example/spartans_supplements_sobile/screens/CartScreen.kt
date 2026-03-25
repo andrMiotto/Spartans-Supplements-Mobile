@@ -1,8 +1,5 @@
 package com.example.spartans_supplements_sobile.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,13 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
-fun CartScreen() {
+fun CartScreen(navController: NavHostController) {
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
-        bottomBar = { AppBottomNavigationBar() } 
+        bottomBar = { AppBottomNavigationBar(navController) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -186,7 +184,7 @@ fun SummaryRow(label: String, value: String) {
 }
 
 @Composable
-fun AppBottomNavigationBar() {
+fun AppBottomNavigationBar(navController: NavHostController) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -195,7 +193,7 @@ fun AppBottomNavigationBar() {
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = false,
-            onClick = {}
+            onClick = {navController.navigate("home")}
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "Cart") },

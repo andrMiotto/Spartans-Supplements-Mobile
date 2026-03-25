@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
@@ -26,13 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
 
 data class Product(val name: String, val price: String, val imageRes: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoreHomeScreen() {
+fun StoreHomeScreen(navController: NavHostController) {
     val products = listOf(
         Product("Whey Protein Isolate", "$34.99", R.drawable.whey_spartans),
         Product("Creatine Monohydrate", "$19.99", R.drawable.creatine_monohydrate),
@@ -54,7 +53,7 @@ fun StoreHomeScreen() {
             )
         )
     }, bottomBar = {
-        BottomNavigationBar()
+        BottomNavigationBar(navController)
     }, containerColor = Color(0xFFF9F9F9)
     ) { paddingValues ->
 
@@ -195,7 +194,7 @@ fun ProductCard(product: Product) {
 }
 
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(
         containerColor = Color.White, tonalElevation = 8.dp
     ) {
@@ -210,7 +209,7 @@ fun BottomNavigationBar() {
         NavigationBarItem(icon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart") },
             label = { Text("Cart") },
             selected = false,
-            onClick = { /* TODO */ },
+            onClick = { navController.navigate("cart")},
             colors = NavigationBarItemDefaults.colors(
                 unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray
             )
