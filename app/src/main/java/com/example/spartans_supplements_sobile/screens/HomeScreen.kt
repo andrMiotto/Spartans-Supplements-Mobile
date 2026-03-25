@@ -53,7 +53,7 @@ fun StoreHomeScreen(navController: NavHostController) {
             )
         )
     }, bottomBar = {
-        BottomNavigationBar()
+        BottomNavigationBar(navController)
     }, containerColor = Color(0xFFF9F9F9)
     ) { paddingValues ->
 
@@ -194,7 +194,7 @@ fun ProductCard(product: Product) {
 }
 
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(
         containerColor = Color.White, tonalElevation = 8.dp
     ) {
@@ -209,7 +209,7 @@ fun BottomNavigationBar() {
         NavigationBarItem(icon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart") },
             label = { Text("Cart") },
             selected = false,
-            onClick = { /* TODO */ },
+            onClick = { navController.navigate("cart")},
             colors = NavigationBarItemDefaults.colors(
                 unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray
             )

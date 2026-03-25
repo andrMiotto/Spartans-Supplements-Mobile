@@ -168,7 +168,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(
-                        onClick = { },
+                        onClick = { navController.navigate("home")},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
