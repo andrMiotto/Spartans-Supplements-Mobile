@@ -1,10 +1,10 @@
 package com.example.spartans_supplements_sobile.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,10 +18,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
+import com.example.spartans_supplements_sobile.R
 
 
 @Composable
-fun RegisterScreenFuntion() {
+fun RegisterScreenFuntion(navController: NavHostController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -30,6 +34,8 @@ fun RegisterScreenFuntion() {
     var nome by remember { mutableStateOf("") }
     var passwordC by remember { mutableStateOf("") }
     var passwordVisibleC by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -45,11 +51,12 @@ fun RegisterScreenFuntion() {
 
         ) {
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = "SUPSTORE",
-                fontSize = 38.sp, fontWeight = FontWeight(900)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Spartans",
+                modifier = Modifier.height(80.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -165,7 +172,7 @@ fun RegisterScreenFuntion() {
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(
-                        onClick = { },
+                        onClick = { navController.navigate("home")},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
@@ -184,10 +191,24 @@ fun RegisterScreenFuntion() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("Don't have an account? ")
-                        Text(
-                            text = "Sign in",
-                            color = Color.Blue
-                        )
+                        Button(
+                            onClick = {navController.navigate("login")},
+                            modifier = Modifier
+                                .height(26.dp).width(50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White
+                            ),  contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                Text(
+                                    text = "Login",
+                                    color = Color.Blue
+                                )
+                            }
+                        }
                     }
                 }
             }
