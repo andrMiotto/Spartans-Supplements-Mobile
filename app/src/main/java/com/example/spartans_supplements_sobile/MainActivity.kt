@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.spartans_supplements_sobile.screens.DetailScreen
+import com.example.login.LoginScreenFuntion
+import com.example.spartans_supplements_sobile.screens.*
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
 import com.example.spartans_supplements_sobile.ui.theme.SpartansSupplementsSobileTheme
 
@@ -20,10 +21,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DetailScreen();
+                    setContent {
+                        RegisterScreenFuntion();
+                    }
                 }
             }
         }
     }
+
+
 }
 
