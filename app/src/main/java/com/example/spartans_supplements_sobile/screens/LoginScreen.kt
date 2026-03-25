@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,10 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreenFuntion() {
+fun LoginScreenFuntion(navController: NavHostController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -127,7 +127,9 @@ fun LoginScreenFuntion() {
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(
-                        onClick = { },
+                        onClick = {
+                                  navController.navigate("home")
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
@@ -146,10 +148,24 @@ fun LoginScreenFuntion() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("Don't have an account? ")
-                        Text(
-                            text = "Sign up",
-                            color = Color.Blue
-                        )
+                        Button(
+                            onClick = {navController.navigate("register")},
+                            modifier = Modifier
+                                .height(27.dp).width(55.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White
+                            ),  contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                Text(
+                                    text = "Register",
+                                    color = Color.Blue
+                                )
+                            }
+                        }
                     }
                 }
             }
