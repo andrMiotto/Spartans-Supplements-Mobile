@@ -1,5 +1,6 @@
 package com.example.spartans_supplements_sobile.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,7 +19,9 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
+import com.example.spartans_supplements_sobile.R
 
 
 @Composable
@@ -48,11 +51,12 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
         ) {
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = "SUPSTORE",
-                fontSize = 38.sp, fontWeight = FontWeight(900)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Spartans",
+                modifier = Modifier.height(80.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))

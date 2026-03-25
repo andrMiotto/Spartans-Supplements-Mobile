@@ -1,5 +1,6 @@
 package com.example.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,8 +17,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
+import com.example.spartans_supplements_sobile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,9 +46,10 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(80.dp))
 
-            Text(
-                text = "SUPSTORE",
-                fontSize = 38.sp, fontWeight = FontWeight(900)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Spartans",
+                modifier = Modifier.height(80.dp)
             )
 
             Spacer(modifier = Modifier.height(40.dp))
