@@ -1,5 +1,5 @@
 package com.example.spartans_supplements_sobile.screens
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,18 +27,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
+import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 
 data class Product(val name: String, val price: String, val imageRes: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoreHomeScreen(navController: NavHostController) {
-    val products = listOf(
-        Product("Whey Protein Isolate", "$34.99", R.drawable.whey_spartans),
-        Product("Creatine Monohydrate", "$19.99", R.drawable.creatine_monohydrate),
-        Product("Pre-Workout Energy", "$29.99", R.drawable.pre_workout),
-        Product("BCAA Amino Acids", "$24.99", R.drawable.bcaa_amino)
-    )
+fun StoreHomeScreen(
+    navController: NavHostController, 
+    viewModel: ProdutoViewModel = viewModel()
+) {
+    val produtos = viewModel.produtos
+
+    LaunchedEffect(Unit) {
+        viewModel.listarProdutos()
+    }
+    val products = produtos.map {
+        Product(
+            name = it.nome,
+            price = "R$ ${it.preco}",
+            imageRes = R.drawable.whey_spartans
+        )
+    }
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
@@ -168,7 +179,7 @@ fun ProductCard(product: Product) {
 
             Text(
                 text = product.name,
-                fontSize = 12.sp,
+                fontSize = 15.sp,
                 lineHeight = 16.sp,
                 modifier = Modifier.height(36.dp)
             )
@@ -198,7 +209,8 @@ fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(
         containerColor = Color.White, tonalElevation = 8.dp
     ) {
-        NavigationBarItem(icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = true,
             onClick = { /* TODO */ },
@@ -206,7 +218,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selectedIconColor = Color.Black, indicatorColor = Color.Transparent
             )
         )
-        NavigationBarItem(icon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart") },
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart") },
             label = { Text("Cart") },
             selected = false,
             onClick = { navController.navigate("cart")},
