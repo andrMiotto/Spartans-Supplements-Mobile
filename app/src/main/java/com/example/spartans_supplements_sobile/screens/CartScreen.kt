@@ -25,14 +25,13 @@ import androidx.compose.ui.unit.sp
 fun CartScreen() {
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
-        bottomBar = { AppBottomNavigationBar() } // Nome único para evitar conflito
+        bottomBar = { AppBottomNavigationBar() } 
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // 1. Cabeçalho
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -54,7 +53,6 @@ fun CartScreen() {
                 )
             }
 
-            // 2. Lista de Itens
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
@@ -67,7 +65,6 @@ fun CartScreen() {
                 }
             }
 
-            // 3. Resumo Financeiro
             CartSummarySection()
         }
     }
@@ -85,13 +82,11 @@ fun CartItemCard() {
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Placeholder da Imagem
             Surface(
                 modifier = Modifier.size(80.dp),
                 color = Color(0xFFF2F2F2),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                // Aqui entraria o AsyncImage do Coil
             }
 
             Column(
@@ -122,7 +117,6 @@ fun CartItemCard() {
                 ) {
                     Text("$39.99", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
 
-                    // Seletor de Quantidade
                     Surface(
                         color = Color(0xFFF5F5F5),
                         shape = RoundedCornerShape(24.dp)
