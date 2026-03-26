@@ -13,8 +13,10 @@ class ProdutoViewModel : ViewModel() {
 
     private val repository = ProdutoRepository()
 
+    var produto: ProdutoResponse? = null
     var produtos by mutableStateOf<List<ProdutoResponse>>(emptyList())
         private set
+
 
     fun listarProdutos() {
         viewModelScope.launch {
@@ -34,4 +36,10 @@ class ProdutoViewModel : ViewModel() {
             }
         }
     }
+    fun findById(id: Long) {
+        viewModelScope.launch {
+            produto = repository.getById(id)
+        }
+    }
+
 }
