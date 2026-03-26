@@ -24,6 +24,18 @@ class ProdutoViewModel : ViewModel() {
         }
     }
 
+    fun deletarProduto(id: Long){
+        viewModelScope.launch {
+            try{
+                val sucesso = repository.delete(id)
+                if(sucesso){
+                    listarProdutos()
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+        }
+    }
     fun findById(id: Long) {
         viewModelScope.launch {
             produto = repository.getById(id)
