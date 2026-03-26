@@ -1,8 +1,3 @@
 <resources>
     <string name="app_name">Spartans-Supplements-Sobile</string>
-    <string name="featured_suplements">Featured Suplements</string>
-    <string name="add_to_cart">Add to cart</string>
-    <string name="details">Details</string>
-
-
 </resources>
