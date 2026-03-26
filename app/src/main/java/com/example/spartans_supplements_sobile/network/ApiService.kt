@@ -2,6 +2,7 @@ package com.example.spartans_supplements_sobile.network
 
 import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoRequest
 import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoResponse
+import com.example.spartans_supplements_sobile.model.dto.usuario.LoginRequest
 import com.example.spartans_supplements_sobile.model.dto.usuario.UsuarioRequest
 import com.example.spartans_supplements_sobile.model.dto.usuario.UsuarioResponse
 import retrofit2.Response
@@ -23,6 +24,10 @@ interface ApiService {
         @Body user: UsuarioRequest
     ): Response<UsuarioResponse>
 
+    @POST("user/login")
+    suspend fun login(
+        @Body request: LoginRequest
+    ): Response<Boolean>
 
     @PUT("user/update/{id}")
     suspend fun updateUser(
