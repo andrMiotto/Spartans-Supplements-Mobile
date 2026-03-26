@@ -1,109 +1,148 @@
 package com.example.spartans_supplements_sobile.screens
 
-import android.widget.Space
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
 
+private val Black = Color(0xFF0D0D0D)
+private val OffWhite = Color(0xFFF8F7F4)
+private val LightGray = Color(0xFFE8E8E8)
+private val MediumGray = Color(0xFF9E9E9E)
+private val AccentOrange = Color(0xFFFF6B2B)
+private val TagBg = Color(0xFFF0EDE8)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen() {
+fun DetailScreen(navController: NavHostController) {
+
+    var quantity by remember { mutableStateOf(1) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { /**/ }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Box(
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(LightGray),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Black,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                     }
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.details),
+                        text = "Detalhes",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        fontSize = 16.sp,
+                        color = Black
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* */ }) {
-                        Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = "Cart")
+                    IconButton(onClick = { }) {
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Favoritar",
+                            tint = Black
+                        )
+                    }
+                    IconButton(onClick = { navController.navigate("cart") }) {
+                        Icon(
+                            imageVector = Icons.Outlined.ShoppingCart,
+                            contentDescription = "Carrinho",
+                            tint = Black
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = OffWhite
+                )
             )
         },
         bottomBar = {
             Surface(
-                color = Color.White,
-                shadowElevation = 8.dp
+                color = OffWhite,
+                shadowElevation = 12.dp
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
-
                 ) {
                     Row(
                         modifier = Modifier
-                            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-
+                            .border(1.5.dp, LightGray, RoundedCornerShape(12.dp))
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
-
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        Text(text = "-", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Text(text = "1", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text(text = "+", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "−",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (quantity > 1) Black else MediumGray,
+                            modifier = Modifier.clickable { if (quantity > 1) quantity-- }
+                        )
+                        Text(
+                            text = "$quantity",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Black
+                        )
+                        Text(
+                            text = "+",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Black,
+                            modifier = Modifier.clickable { quantity++ }
+                        )
                     }
 
                     Button(
-                        onClick = { /*  */ },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                        shape = RoundedCornerShape(8.dp),
+                        onClick = { },
+                        colors = ButtonDefaults.buttonColors(containerColor = Black),
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .weight(1f)
-                            .height(50.dp)
+                            .height(52.dp)
                     ) {
                         Text(
-                            stringResource(id = R.string.add_to_cart),
-                            fontSize = 16.sp,
+                            text = "Adicionar ao Carrinho",
+                            fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
@@ -111,60 +150,184 @@ fun DetailScreen() {
                 }
             }
         },
-        containerColor = Color.White
+        containerColor = OffWhite
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
+        ) {
 
-            ) {
-            Image(
-                painter = painterResource(id = R.drawable.black_square),
-                contentDescription = "Black Square",
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
-                    .height(250.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+                    .fillMaxWidth()
+                    .height(280.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color(0xFFEDEBE6), Color(0xFFF8F7F4))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.whey_spartans),
+                    contentDescription ="whey",
+                    modifier = Modifier.size(300.dp)
+                )            }
 
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "MUSCLEPRO",
-                color = Color.Gray
-            )
-            Text(
-                text = "Premium Whey Protein Isolate ",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "$45.99",
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(15.dp))
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
+            ) {
 
-            Text(
-                text = "Decription",
-                fontSize = 19.sp,
-                fontWeight = FontWeight.Bold
-            )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Tag(text = "Proteínas")
+                    Tag(text = "Isolado")
+                }
 
-            Text(
-                text = "High-quality whey protein isolate designed to\n" +
-                        "support muscle growth and recovery. Contains\n" +
-                        "25g of protein per serving with zero sugar and\n" +
-                        "low carbs. Perfect for post-workout shakes or\n" +
-                        "daily protein supplementation.",
-                color = Color.Gray
+                Spacer(modifier = Modifier.height(12.dp))
 
-            )
+                Text(
+                    text = "MUSCLEPRO",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Red,
+                    letterSpacing = 2.sp
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "Premium Whey\nProtein Isolate",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Black,
+                    lineHeight = 32.sp
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "R$ 45,99",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Black
+                    )
+                    Text(
+                        text = "R$ 59,99",
+                        fontSize = 15.sp,
+                        color = MediumGray,
+                        textDecoration = TextDecoration.LineThrough,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color.Red)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "23% OFF",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Divider(color = LightGray, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = "Descrição",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Black
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Proteína isolada de alta qualidade desenvolvida para acelerar o ganho muscular e a recuperação pós-treino. Cada porção contém 25g de proteína, zero açúcar e baixo teor de carboidratos. Ideal para shakes pós-treino ou suplementação diária.",
+                    fontSize = 14.sp,
+                    color = MediumGray,
+                    lineHeight = 22.sp
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Informações por porção",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Black
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    NutritionCard(label = "Proteína", value = "25g", modifier = Modifier.weight(1f))
+                    NutritionCard(label = "Carboidratos", value = "2g", modifier = Modifier.weight(1f))
+                    NutritionCard(label = "Calorias", value = "130", modifier = Modifier.weight(1f))
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
-
-
     }
+}
 
+@Composable
+private fun Tag(text: String) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(TagBg)
+            .padding(horizontal = 12.dp, vertical = 5.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF555555)
+        )
+    }
+}
+
+@Composable
+private fun NutritionCard(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(TagBg)
+            .padding(vertical = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = value,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Black,
+            color = Black
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = label,
+            fontSize = 11.sp,
+            color = MediumGray,
+            fontWeight = FontWeight.Medium
+        )
+    }
 }

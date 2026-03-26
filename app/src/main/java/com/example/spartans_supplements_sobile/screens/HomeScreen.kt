@@ -5,10 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +29,7 @@ import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-data class Product(val name: String, val price: String, val imageRes: Int)
+data class Product(val name: String, val price: String, val imageRes: Int, val categoria: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,9 +51,14 @@ fun StoreHomeScreen(
             Product(
                 name = it.nome,
                 price = "R$ ${it.preco}",
-                imageRes = R.drawable.whey_spartans
+                imageRes = R.drawable.whey_spartans,
+                categoria = it.categoria ?: "Outros"
             )
         }
+    }
+
+    val categorias = remember(products) {
+        products.groupBy { it.categoria }
     }
 
     Scaffold(
@@ -79,39 +82,84 @@ fun StoreHomeScreen(
         containerColor = Color(0xFFF9F9F9)
     ) { paddingValues ->
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentPadding = PaddingValues(bottom = 24.dp)
         ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                HeroBanner()
-            }
 
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = stringResource(id = R.string.featured_suplements),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 8.dp)
+            item {
+                HeroBanner(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
             }
 
-            items(products) { product ->
-                ProductCard(product)
+            categorias.forEach { (categoria, produtosDaCategoria) ->
+                item {
+                    CategoryHeader(titulo = categoria)
+                }
+                item {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(produtosDaCategoria) { product ->
+                            ProductCard(
+                                product = product,
+                                modifier = Modifier.width(170.dp)
+                            )
+                        }
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
 }
 
+
 @Composable
-fun HeroBanner() {
-    Box(
+fun CategoryHeader(titulo: String) {
+    Row(
         modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(20.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(Color.Black)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = titulo,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Black
+            )
+        }
+        Text(
+            text = "Ver todos",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
+        )
+    }
+}
+
+
+@Composable
+fun HeroBanner(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -122,11 +170,10 @@ fun HeroBanner() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
@@ -135,18 +182,17 @@ fun HeroBanner() {
                     color = Color.White,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 26.sp
+                    lineHeight = 28.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Whey, creatine and essentials\nfor your first routine.",
-                    color = Color.White,
+                    color = Color.White.copy(alpha = 0.8f),
                     fontSize = 12.sp
                 )
             }
-
             Button(
-                onClick = { /* Implementar Shop Now */ },
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
@@ -156,19 +202,20 @@ fun HeroBanner() {
     }
 }
 
+
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(product: Product, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
+        modifier = modifier.border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(140.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color(0xFFF5F5F5)),
                 contentAlignment = Alignment.Center
@@ -176,44 +223,39 @@ fun ProductCard(product: Product) {
                 Image(
                     painter = painterResource(id = product.imageRes),
                     contentDescription = product.name,
-                    modifier = Modifier.size(120.dp)
+                    modifier = Modifier.size(110.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = product.name,
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
-                lineHeight = 18.sp,
-                modifier = Modifier.height(36.dp)
+                lineHeight = 17.sp,
+                modifier = Modifier.height(34.dp)
             )
-
             Spacer(modifier = Modifier.height(4.dp))
-
             Text(
                 text = product.price,
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.Black
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { /* Add to cart */ },
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(vertical = 6.dp)
             ) {
                 Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -225,7 +267,7 @@ fun BottomNavigationBar(navController: NavHostController) {
             icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = true,
-            onClick = { /* Home */ },
+            onClick = { },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Black,
                 indicatorColor = Color(0xFFF0F0F0)
