@@ -78,6 +78,7 @@ dependencies {
     // Navegação e Ícones (da branch screens)
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.play.services.analytics.impl)
 
     // Testes e Debug
     testImplementation(libs.junit)
