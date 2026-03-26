@@ -21,4 +21,17 @@ class ProdutoViewModel : ViewModel() {
             produtos = repository.list() ?: emptyList()
         }
     }
+
+    fun deletarProduto(id: Long){
+        viewModelScope.launch {
+            try{
+                val sucesso = repository.delete(id)
+                if(sucesso){
+                    listarProdutos()
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+        }
+    }
 }
