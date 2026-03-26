@@ -18,10 +18,11 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<UsuarioResponse>
 
-    @POST("user/create")
+    @POST("user/register")
     suspend fun createUser(
         @Body user: UsuarioRequest
     ): Response<UsuarioResponse>
+
 
     @PUT("user/update/{id}")
     suspend fun updateUser(

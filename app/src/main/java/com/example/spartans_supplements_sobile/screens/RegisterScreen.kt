@@ -22,6 +22,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.spartans_supplements_sobile.model.dto.usuario.UsuarioRequest
+import com.example.spartans_supplements_sobile.network.RetrofitClient
 
 
 @Composable
@@ -171,8 +175,32 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val scope = rememberCoroutineScope()
+                    var telefone = 4799999999
+                    var endereço = "Rua"
                     Button(
-                        onClick = { navController.navigate("home")},
+                        onClick = {
+
+                                  scope.launch {
+                                      try {
+                                          val response = RetrofitClient.apiService.createUser(
+                                              UsuarioRequest(nome, email, password)
+                                          )
+
+                                          if (response.isSuccessful) {
+                                              val user = response.body()
+
+                                              navController.navigate("home")
+
+                                          } else {
+                                              println("Erro login")
+                                          }
+
+                                      } catch (e: Exception) {
+                                          e.printStackTrace()
+                                      }
+                                  }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
@@ -194,7 +222,8 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         Button(
                             onClick = {navController.navigate("login")},
                             modifier = Modifier
-                                .height(26.dp).width(50.dp),
+                                .height(26.dp)
+                                .width(50.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White
                             ),  contentPadding = PaddingValues(0.dp)
