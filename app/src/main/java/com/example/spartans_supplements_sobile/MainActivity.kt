@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.*
 import com.example.login.LoginScreenFuntion
 import com.example.spartans_supplements_sobile.screens.CartScreen
+import com.example.spartans_supplements_sobile.screens.DetailScreen
 import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
 import com.example.spartans_supplements_sobile.ui.theme.SpartansSupplementsSobileTheme
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login") {
+                    NavHost(navController = navController, startDestination = "home") {
 
                         composable("login") {
                             LoginScreenFuntion(navController)
@@ -43,6 +44,9 @@ class MainActivity : ComponentActivity() {
 
                         composable("cart") {
                             CartScreen(navController)
+                        }
+                        composable("detail") {
+                            DetailScreen(navController)
                         }
                     }
                 }

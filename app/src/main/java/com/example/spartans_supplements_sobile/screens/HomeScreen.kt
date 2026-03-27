@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +32,7 @@ import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-data class ProductUI(val name: String, val price: String, val imageRes: Int)
+data class Product(val name: String, val price: String, val imageRes: Int, val categoria: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,8 +45,23 @@ fun StoreHomeScreen(
     LaunchedEffect(Unit) {
         while (isActive) {
             viewModel.listarProdutos()
-            delay(500)
+            delay(5000)
         }
+    }
+
+    val products = remember(produtosDaApi) {
+        produtosDaApi.map {
+            Product(
+                name = it.nome,
+                price = "R$ ${it.preco}",
+                imageRes = R.drawable.whey_spartans,
+                categoria = it.categoria ?: "Outros"
+            )
+        }
+    }
+
+    val categorias = remember(products) {
+        products.groupBy { it.categoria }
     }
 
     Scaffold(
@@ -67,88 +81,16 @@ fun StoreHomeScreen(
         containerColor = Color(0xFFF9F9F9)
     ) { paddingValues ->
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentPadding = PaddingValues(bottom = 24.dp)
         ) {
-            item(span = { GridItemSpan(maxLineSpan) }) { HeroBanner() }
 
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = stringResource(id = R.string.featured_suplements),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                )
-            }
-
-            items(produtosDaApi) { produtoApi ->
-                ProductCard(
-                    product = ProductUI(
-                        name = produtoApi.nome,
-                        price = "R$ ${produtoApi.preco}",
-                        imageRes = R.drawable.whey_spartans
-                    ),
-                    onDelete = { viewModel.deletarProduto(produtoApi.id) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ProductCard(product: ProductUI, onDelete: () -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = "Excluir Produto") },
-            text = { Text("Tem certeza que deseja remover ${product.name} da lista?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDelete()
-                        showDialog = false
-                    }
-                ) {
-                    Text("Excluir", color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancelar", color = Color.Gray)
-                }
-            },
-            shape = RoundedCornerShape(16.dp),
-            containerColor = Color.White
-        )
-    }
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFF8F8F8)),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = product.imageRes),
-                    contentDescription = product.name,
-                    modifier = Modifier.size(90.dp)
+            item {
+                HeroBanner(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
 
                 Surface(
@@ -172,43 +114,71 @@ fun ProductCard(product: ProductUI, onDelete: () -> Unit) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = product.name,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333),
-                maxLines = 1
-            )
-
-            Text(
-                text = product.price,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.Black,
-                modifier = Modifier.padding(top = 2.dp)
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-                onClick = { /* Add to cart */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            categorias.forEach { (categoria, produtosDaCategoria) ->
+                item {
+                    CategoryHeader(titulo = categoria)
+                }
+                item {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(produtosDaCategoria) { product ->
+                            ProductCard(
+                                product = product,
+                                modifier = Modifier.width(170.dp)
+                            )
+                        }
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
 }
 
+
 @Composable
-fun HeroBanner() {
-    Box(
+fun CategoryHeader(titulo: String) {
+    Row(
         modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(20.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(Color.Black)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = titulo,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Black
+            )
+        }
+        Text(
+            text = "Ver todos",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
+        )
+    }
+}
+
+
+@Composable
+fun HeroBanner(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -219,11 +189,10 @@ fun HeroBanner() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
@@ -232,22 +201,75 @@ fun HeroBanner() {
                     color = Color.White,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 26.sp
+                    lineHeight = 28.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Whey, creatine and essentials\nfor your first routine.",
-                    color = Color.White,
+                    color = Color.White.copy(alpha = 0.8f),
                     fontSize = 12.sp
                 )
             }
-
             Button(
-                onClick = { /* Implementar Shop Now */ },
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Shop now", color = Color.Black, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProductCard(product: Product, modifier: Modifier = Modifier) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = modifier.border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
+    ) {
+        Column(modifier = Modifier.padding(10.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xFFF5F5F5)),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = product.imageRes),
+                    contentDescription = product.name,
+                    modifier = Modifier.size(110.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = product.name,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 2,
+                lineHeight = 17.sp,
+                modifier = Modifier.height(34.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = product.price,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = { },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(vertical = 6.dp)
+            ) {
+                Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -262,7 +284,10 @@ fun BottomNavigationBar(navController: NavHostController) {
             label = { Text("Home") },
             selected = true,
             onClick = { },
-            colors = NavigationBarItemDefaults.colors(selectedIconColor = Color.Black, indicatorColor = Color(0xFFEEEEEE))
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.Black,
+                indicatorColor = Color(0xFFF0F0F0)
+            )
         )
         NavigationBarItem(
             icon = { Icon(Icons.Outlined.ShoppingCart, "Cart") },
