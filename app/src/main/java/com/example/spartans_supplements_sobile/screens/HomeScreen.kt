@@ -48,7 +48,7 @@ fun StoreHomeScreen(
 ) {
     val produtosDaApi = viewModel.produtos
 
-    // Estados para o Diálogo de Confirmação
+
     var showDeleteDialog by remember { mutableStateOf(false) }
     var productToDelete by remember { mutableStateOf<Product?>(null) }
 
@@ -172,12 +172,11 @@ fun ProductCard(
                         .align(Alignment.Center)
                 )
 
-                // ÁREA BRANCA REDUZIDA (Usando Box para controle total)
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(6.dp) // Distância da borda do card cinza
-                        .size(26.dp)   // Tamanho total da área branca (ajuste conforme queira mais ou menos borda)
+                        .padding(6.dp)
+                        .size(26.dp)
                         .background(Color.White.copy(alpha = 0.9f), CircleShape)
                         .clickable { onDeleteClick() },
                     contentAlignment = Alignment.Center
