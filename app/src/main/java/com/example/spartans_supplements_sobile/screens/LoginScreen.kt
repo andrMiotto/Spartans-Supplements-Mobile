@@ -1,5 +1,6 @@
 package com.example.login
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
+import com.example.spartans_supplements_sobile.model.dto.usuario.LoginRequest
+import com.example.spartans_supplements_sobile.network.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +94,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                     Text(text = "Email address", modifier = Modifier.fillMaxWidth(),fontWeight = FontWeight(600))
                     Spacer(modifier = Modifier.height(10.dp),)
                     OutlinedTextField(
-                        
+
                         value = email,
                         onValueChange = { email = it },
                         placeholder = { Text("name@example.com") },
@@ -130,9 +136,38 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val scope = rememberCoroutineScope()
                     Button(
                         onClick = {
-                                  navController.navigate("home")
+                            scope.launch {
+
+                                try {
+                                    val response = withContext(Dispatchers.IO) {
+                                        RetrofitClient.apiService.login(
+                                            LoginRequest(email, password)
+                                        )
+                                    }
+
+                                    if (response.isSuccessful) {
+
+                                        val success = response.body()
+
+                                        if (success == true) {
+
+                                            navController.navigate("home")
+
+                                        } else {
+                                            Log.e("LOGIN", "Email ou senha incorretos")
+                                        }
+
+                                    } else {
+                                        Log.e("LOGIN", "Erro API: ${response.errorBody()?.string()}")
+                                    }
+
+                                } catch (e: Exception) {
+                                    Log.e("LOGIN", "Erro: ${e.message}")
+                                }
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -155,7 +190,8 @@ fun LoginScreenFuntion(navController: NavHostController) {
                         Button(
                             onClick = {navController.navigate("register")},
                             modifier = Modifier
-                                .height(27.dp).width(55.dp),
+                                .height(27.dp)
+                                .width(55.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White
                             ),  contentPadding = PaddingValues(0.dp)

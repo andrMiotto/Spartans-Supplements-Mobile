@@ -3,13 +3,16 @@ package com.example.spartans_supplements_sobile.screens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
@@ -71,14 +74,10 @@ fun StoreHomeScreen(
                         modifier = Modifier.height(40.dp)
                     )
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                )
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
             )
         },
-        bottomBar = {
-            BottomNavigationBar(navController)
-        },
+        bottomBar = { BottomNavigationBar(navController) },
         containerColor = Color(0xFFF9F9F9)
     ) { paddingValues ->
 
@@ -93,6 +92,26 @@ fun StoreHomeScreen(
                 HeroBanner(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
+
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                        .size(32.dp)
+                        .clickable { showDialog = true },
+                    shape = CircleShape,
+                    color = Color.White,
+                    shadowElevation = 4.dp
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Delete",
+                            tint = Color(0xFFE53935),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
 
             categorias.forEach { (categoria, produtosDaCategoria) ->
@@ -259,12 +278,9 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier) {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    NavigationBar(
-        containerColor = Color.White,
-        tonalElevation = 8.dp
-    ) {
+    NavigationBar(containerColor = Color.White, tonalElevation = 10.dp) {
         NavigationBarItem(
-            icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },
+            icon = { Icon(Icons.Outlined.Home, "Home") },
             label = { Text("Home") },
             selected = true,
             onClick = { },
@@ -274,14 +290,10 @@ fun BottomNavigationBar(navController: NavHostController) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart") },
+            icon = { Icon(Icons.Outlined.ShoppingCart, "Cart") },
             label = { Text("Cart") },
             selected = false,
-            onClick = { navController.navigate("cart") },
-            colors = NavigationBarItemDefaults.colors(
-                unselectedIconColor = Color.Gray,
-                unselectedTextColor = Color.Gray
-            )
+            onClick = { navController.navigate("cart") }
         )
     }
 }
