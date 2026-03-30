@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -125,17 +126,29 @@ fun StoreHomeScreen(
                 item {
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically // Alinha o botão de adicionar com os outros cards
                     ) {
+                        // Lista de produtos vindos da API
                         items(produtosDaCategoria) { product ->
                             ProductCard(
                                 product = product,
                                 modifier = Modifier.width(170.dp),
                                 onClick = { navController.navigate("detail/${product.id}") },
                                 onDeleteClick = {
-                                    // Properly wire the state to open the dialog
                                     productToDelete = product
                                     showDeleteDialog = true
+                                }
+                            )
+                        }
+
+
+                        item {
+                            AddProductCard(
+                                modifier = Modifier.width(170.dp),
+                                onClick = {
+                                    // Certifique-se de que a rota no seu NavHost seja "register_product"
+                                    navController.navigate("register_product")
                                 }
                             )
                         }
@@ -267,7 +280,7 @@ fun ProductCard(
                         .padding(6.dp)
                         .size(26.dp)
                         .background(Color.White.copy(alpha = 0.9f), CircleShape)
-                        .clickable { onDeleteClick() }, // Now this works perfectly
+                        .clickable { onDeleteClick() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -292,6 +305,33 @@ fun ProductCard(
             ) {
                 Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
+        }
+    }
+}
+
+@Composable
+fun AddProductCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        modifier = modifier
+            .height(280.dp)
+            .border(2.dp, Color.LightGray, RoundedCornerShape(12.dp))
+            .clickable { onClick() }
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.AddCircle,
+                contentDescription = "Adicionar Produto",
+                tint = Color.Black,
+                modifier = Modifier.size(80.dp)
+            )
         }
     }
 }
