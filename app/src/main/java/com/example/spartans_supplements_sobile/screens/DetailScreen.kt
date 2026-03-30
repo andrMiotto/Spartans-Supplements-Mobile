@@ -21,12 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.spartans_supplements_sobile.R
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 
@@ -128,10 +130,13 @@ fun DetailScreen(
                     ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.whey_spartans),
+                    AsyncImage(
+                        model = produto.imagemUrl,
                         contentDescription = produto.nome,
-                        modifier = Modifier.size(300.dp)
+                        modifier = Modifier
+                            .size(199.dp)
+                            .align(Alignment.Center),
+                        contentScale = ContentScale.Fit
                     )
                 }
 
@@ -170,16 +175,51 @@ fun DetailScreen(
 
                     Text(text = "Informações", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(12.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        NutritionCard(label = "Peso", value = "${produto.peso}kg", modifier = Modifier.weight(1f))
-                        NutritionCard(label = "Estoque", value = "${produto.quantidadeEstoque}", modifier = Modifier.weight(1f))
-                        NutritionCard(label = "Preço", value = "R$${"%.0f".format(produto.preco)}", modifier = Modifier.weight(1f))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        NutritionCard(
+                            label = "Peso",
+                            value = "${produto.peso}kg",
+                            modifier = Modifier.weight(1f)
+                        )
+                        NutritionCard(
+                            label = "Estoque",
+                            value = "${produto.quantidadeEstoque}",
+                            modifier = Modifier.weight(1f)
+                        )
+                        NutritionCard(
+                            label = "Preço",
+                            value = "R$${"%.0f".format(produto.preco)}",
+                            modifier = Modifier.weight(1f)
+                        )
+
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        NutritionCard(label = "Calorias", value = "${"%.0f".format(produto.calorias)}", modifier = Modifier.weight(1f))
-                        NutritionCard(label = "Carboidratos", value = "${"%.0f".format(produto.carboidratos)}", modifier = Modifier.weight(1f))
-                        NutritionCard(label = "Proteinas", value = "${"%.0f".format(produto.proteinas)}", modifier = Modifier.weight(1f))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        NutritionCard(
+                            label = "Calorias",
+                            value = "${"%.0f".format(produto.calorias)}",
+                            modifier = Modifier.weight(1f)
+                        )
+                        NutritionCard(
+                            label = "Carboidratos",
+                            value = "${"%.0f".format(produto.carboidratos)}",
+                            modifier = Modifier.weight(1f)
+                        )
+                        NutritionCard(
+                            label = "Proteinas",
+                            value = "${"%.0f".format(produto.proteinas)}",
+                            modifier = Modifier.weight(1f)
+                        )
+
+
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                 }
