@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.spartans_supplements_sobile.R
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 import kotlinx.coroutines.delay
@@ -36,7 +37,7 @@ data class Product(
     val id: Long,
     val name: String,
     val price: String,
-    val imageRes: Int,
+    val imageRes: String,
     val categoria: String
 )
 
@@ -64,7 +65,7 @@ fun StoreHomeScreen(
                 id = it.id,
                 name = it.nome,
                 price = "R$ ${it.preco}",
-                imageRes = R.drawable.whey_spartans,
+                imageRes = it.imagemUrl ?: "",
                 categoria = it.categoria ?: "Outros"
             )
         }
@@ -251,12 +252,13 @@ fun ProductCard(
                     .background(Color(0xFFF5F5F5))
             ) {
 
-                Image(
-                    painter = painterResource(id = product.imageRes),
+                AsyncImage(
+                    model = product.imageRes,
                     contentDescription = product.name,
                     modifier = Modifier
                         .size(110.dp)
-                        .align(Alignment.Center)
+                        .align(Alignment.Center),
+                    contentScale = ContentScale.Fit
                 )
 
                 Box(
