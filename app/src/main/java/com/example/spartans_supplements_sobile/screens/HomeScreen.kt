@@ -48,7 +48,6 @@ fun StoreHomeScreen(
 ) {
     val produtosDaApi = viewModel.produtos
 
-
     var showDeleteDialog by remember { mutableStateOf(false) }
     var productToDelete by remember { mutableStateOf<Product?>(null) }
 
@@ -112,40 +111,13 @@ fun StoreHomeScreen(
         bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues).fillMaxSize(),
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
+
             item { Box(modifier = Modifier.padding(16.dp)) { HeroBanner() } }
-
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
-                ) {
-                    HeroBanner()
-
-                    Surface(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(8.dp)
-                            .size(32.dp)
-                            .clickable { showDialog = true },
-                        shape = CircleShape,
-                        color = Color.White,
-                        shadowElevation = 4.dp
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete,
-                                contentDescription = "Delete",
-                                tint = Color(0xFFE53935),
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
-            }
 
             categorias.forEach { (categoria, produtosDaCategoria) ->
                 item { CategoryHeader(titulo = categoria) }
@@ -158,7 +130,12 @@ fun StoreHomeScreen(
                             ProductCard(
                                 product = product,
                                 modifier = Modifier.width(170.dp),
-                                onClick = { navController.navigate("detail/${product.id}") }
+                                onClick = { navController.navigate("detail/${product.id}") },
+                                onDeleteClick = {
+                                    // Properly wire the state to open the dialog
+                                    productToDelete = product
+                                    showDeleteDialog = true
+                                }
                             )
                         }
                     }
@@ -202,7 +179,6 @@ fun CategoryHeader(titulo: String) {
         )
     }
 }
-
 
 @Composable
 fun HeroBanner(modifier: Modifier = Modifier) {
@@ -250,9 +226,13 @@ fun HeroBanner(modifier: Modifier = Modifier) {
     }
 }
 
-
 @Composable
-fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun ProductCard(
+    product: Product,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -285,14 +265,14 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> 
                         .padding(6.dp)
                         .size(26.dp)
                         .background(Color.White.copy(alpha = 0.9f), CircleShape)
-                        .clickable { onDeleteClick() },
+                        .clickable { onDeleteClick() }, // Now this works perfectly
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = "Delete",
                         tint = Color(0xFFE53935),
-                        modifier = Modifier.size(18.dp) // Mantido o tamanho original do ícone
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
@@ -309,35 +289,6 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> 
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
-
-
-@Composable
-fun CategoryHeader(titulo: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.width(4.dp).height(20.dp).background(Color.Black))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = titulo, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
-        }
-    }
-}
-
-@Composable
-fun HeroBanner() {
-    Box(modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(16.dp))) {
-        Image(painter = painterResource(id = R.drawable.black_square), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
-        Column(modifier = Modifier.padding(20.dp)) {
-            Text("Start simple\nwith everyday\nsupplements", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-            Spacer(modifier = Modifier.weight(1f))
-            Button(onClick = { }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
-                Text("Shop now", color = Color.Black)
             }
         }
     }
