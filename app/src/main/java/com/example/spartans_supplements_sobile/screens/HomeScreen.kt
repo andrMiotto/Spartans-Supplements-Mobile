@@ -48,7 +48,9 @@ fun StoreHomeScreen(
 ) {
     val produtosDaApi = viewModel.produtos
 
-    var showDialog by remember { mutableStateOf(false) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var productToDelete by remember { mutableStateOf<Product?>(null) }
 
     LaunchedEffect(Unit) {
         while (isActive) {
@@ -73,29 +75,47 @@ fun StoreHomeScreen(
         products.groupBy { it.categoria }
     }
 
+    if (showDeleteDialog && productToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Excluir Produto") },
+            text = { Text("Tem certeza que deseja deletar '${productToDelete?.name}'? Esta ação não pode ser desfeita.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        productToDelete?.let { viewModel.deletarProduto(it.id) }
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Sim, Deletar", color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar", color = Color.Black)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Logo Spartans",
-                        modifier = Modifier.height(40.dp)
-                    )
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Logo", modifier = Modifier.height(40.dp))
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
             )
         },
-        bottomBar = { BottomNavigationBar(navController) },
-        containerColor = Color(0xFFF9F9F9)
+        bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
-
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.padding(paddingValues).fillMaxSize(),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
+            item { Box(modifier = Modifier.padding(16.dp)) { HeroBanner() } }
 
             item {
                 Box(
@@ -128,9 +148,7 @@ fun StoreHomeScreen(
             }
 
             categorias.forEach { (categoria, produtosDaCategoria) ->
-                item {
-                    CategoryHeader(titulo = categoria)
-                }
+                item { CategoryHeader(titulo = categoria) }
                 item {
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -145,14 +163,11 @@ fun StoreHomeScreen(
                         }
                     }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
 }
-
 
 @Composable
 fun CategoryHeader(titulo: String) {
@@ -247,43 +262,51 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> 
             .clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0xFFF5F5F5)),
-                contentAlignment = Alignment.Center
+                    .background(Color(0xFFF5F5F5))
             ) {
+
                 Image(
                     painter = painterResource(id = product.imageRes),
                     contentDescription = product.name,
-                    modifier = Modifier.size(110.dp)
+                    modifier = Modifier
+                        .size(110.dp)
+                        .align(Alignment.Center)
                 )
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(6.dp)
+                        .size(26.dp)
+                        .background(Color.White.copy(alpha = 0.9f), CircleShape)
+                        .clickable { onDeleteClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = "Delete",
+                        tint = Color(0xFFE53935),
+                        modifier = Modifier.size(18.dp) // Mantido o tamanho original do ícone
+                    )
+                }
             }
+
             Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = product.name,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2,
-                lineHeight = 17.sp,
-                modifier = Modifier.height(34.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = product.price,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.Black
-            )
+            Text(text = product.name, fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 2, modifier = Modifier.height(34.dp))
+            Text(text = product.price, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = { onClick() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 6.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
@@ -293,23 +316,37 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> 
 
 
 @Composable
+fun CategoryHeader(titulo: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.width(4.dp).height(20.dp).background(Color.Black))
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = titulo, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+        }
+    }
+}
+
+@Composable
+fun HeroBanner() {
+    Box(modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(16.dp))) {
+        Image(painter = painterResource(id = R.drawable.black_square), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        Column(modifier = Modifier.padding(20.dp)) {
+            Text("Start simple\nwith everyday\nsupplements", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+            Spacer(modifier = Modifier.weight(1f))
+            Button(onClick = { }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+                Text("Shop now", color = Color.Black)
+            }
+        }
+    }
+}
+
+@Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    NavigationBar(containerColor = Color.White, tonalElevation = 10.dp) {
-        NavigationBarItem(
-            icon = { Icon(Icons.Outlined.Home, "Home") },
-            label = { Text("Home") },
-            selected = true,
-            onClick = { },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.Black,
-                indicatorColor = Color(0xFFF0F0F0)
-            )
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Outlined.ShoppingCart, "Cart") },
-            label = { Text("Cart") },
-            selected = false,
-            onClick = { navController.navigate("cart") }
-        )
+    NavigationBar(containerColor = Color.White) {
+        NavigationBarItem(icon = { Icon(Icons.Outlined.Home, null) }, label = { Text("Home") }, selected = true, onClick = {})
+        NavigationBarItem(icon = { Icon(Icons.Outlined.ShoppingCart, null) }, label = { Text("Cart") }, selected = false, onClick = { navController.navigate("cart") })
     }
 }
