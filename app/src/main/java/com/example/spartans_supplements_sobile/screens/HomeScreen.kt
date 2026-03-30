@@ -32,7 +32,13 @@ import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-data class Product(val name: String, val price: String, val imageRes: Int, val categoria: String)
+data class Product(
+    val id: Long,
+    val name: String,
+    val price: String,
+    val imageRes: Int,
+    val categoria: String
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +48,6 @@ fun StoreHomeScreen(
 ) {
     val produtosDaApi = viewModel.produtos
 
-    // Declaração do estado do dialog — estava faltando
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -55,6 +60,7 @@ fun StoreHomeScreen(
     val products = remember(produtosDaApi) {
         produtosDaApi.map {
             Product(
+                id = it.id,
                 name = it.nome,
                 price = "R$ ${it.preco}",
                 imageRes = R.drawable.whey_spartans,
@@ -92,7 +98,6 @@ fun StoreHomeScreen(
         ) {
 
             item {
-                // Box para permitir o uso de align no Surface
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,7 +107,7 @@ fun StoreHomeScreen(
 
                     Surface(
                         modifier = Modifier
-                            .align(Alignment.TopEnd) // agora funciona dentro do Box
+                            .align(Alignment.TopEnd)
                             .padding(8.dp)
                             .size(32.dp)
                             .clickable { showDialog = true },
@@ -122,7 +127,6 @@ fun StoreHomeScreen(
                 }
             }
 
-            // forEach dentro de LazyColumn usando item {} para cada bloco
             categorias.forEach { (categoria, produtosDaCategoria) ->
                 item {
                     CategoryHeader(titulo = categoria)
@@ -135,7 +139,8 @@ fun StoreHomeScreen(
                         items(produtosDaCategoria) { product ->
                             ProductCard(
                                 product = product,
-                                modifier = Modifier.width(170.dp)
+                                modifier = Modifier.width(170.dp),
+                                onClick = { navController.navigate("detail/${product.id}") }
                             )
                         }
                     }
@@ -232,12 +237,14 @@ fun HeroBanner(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun ProductCard(product: Product, modifier: Modifier = Modifier) {
+fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = modifier.border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
+        modifier = modifier
+            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
+            .clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Box(
@@ -272,7 +279,7 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { },
+                onClick = { onClick() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth(),

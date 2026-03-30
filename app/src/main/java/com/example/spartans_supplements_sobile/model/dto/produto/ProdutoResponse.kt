@@ -8,6 +8,8 @@ data class ProdutoResponse(
     val peso: Double,
     val categoria: String,
     val imagemUrl: String,
-    val quantidadeEstoque: Int
-
+    val quantidadeEstoque: Int,
+    val calorias: Double,
+    val proteinas: Double,
+    val carboidratos: Double
 )
