@@ -1,5 +1,6 @@
 package com.example.spartans_supplements_sobile
 
+import DetailScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,7 +13,6 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.login.LoginScreenFuntion
 import com.example.spartans_supplements_sobile.screens.CartScreen
-import com.example.spartans_supplements_sobile.screens.DetailScreen
 import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
 import com.example.spartans_supplements_sobile.screens.UpdateProductScreen

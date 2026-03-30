@@ -26,6 +26,15 @@ class ProdutoRepository {
         val response = RetrofitClient.apiService.deleteProduct(id)
         return response.isSuccessful
     }
+    suspend fun update(id: Long, produto: ProdutoRequest): Boolean {
+        return try {
+            val response = RetrofitClient.apiService.updateProduct(id, produto)
+            response.isSuccessful
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 
 
 }

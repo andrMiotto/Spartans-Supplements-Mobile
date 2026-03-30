@@ -68,7 +68,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-
+    implementation("io.coil-kt:coil-compose:2.5.0")
     // Dependências Base de UI (da branch screens)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
