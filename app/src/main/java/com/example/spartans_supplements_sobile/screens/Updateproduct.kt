@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
+import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoRequest
 
 private val Black = Color(0xFF0D0D0D)
 private val OffWhite = Color(0xFFF8F7F4)
@@ -36,7 +37,6 @@ fun UpdateProductScreen(
     id: Long,
     viewModel: ProdutoViewModel = viewModel()
 ) {
-    // Estados para os campos do seu JSON
     var nome by remember { mutableStateOf("") }
     var preco by remember { mutableStateOf("") }
     var descricao by remember { mutableStateOf("") }
@@ -48,11 +48,9 @@ fun UpdateProductScreen(
     var proteinas by remember { mutableStateOf("") }
     var carboidratos by remember { mutableStateOf("") }
 
-
     LaunchedEffect(id) {
         viewModel.findById(id)
     }
-
 
     val produtoCarregado = viewModel.produto
     LaunchedEffect(produtoCarregado) {
@@ -89,8 +87,27 @@ fun UpdateProductScreen(
                 Button(
                     onClick = {
 
+                        fun String.toSafeDouble() = this.replace(",", ".").trim().toDoubleOrNull() ?: 0.0
 
-                        navController.popBackStack()
+
+                        val produtoEditado = ProdutoRequest(
+                            nome = nome,
+                            preco = preco.toSafeDouble(),
+                            descricao = descricao,
+                            peso = peso.toSafeDouble(),
+                            categoria = categoria,
+                            imagemUrl = imagemUrl,
+                            quantidadeEstoque = estoque.toIntOrNull() ?: 0,
+                            calorias = calorias.toSafeDouble(),
+                            proteinas = proteinas.toSafeDouble(),
+                            carboidratos = carboidratos.toSafeDouble()
+                        )
+
+
+                        viewModel.atualizarProduto(id, produtoEditado) {
+
+                            navController.popBackStack()
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Black),
                     shape = RoundedCornerShape(12.dp),
@@ -118,9 +135,7 @@ fun UpdateProductScreen(
             }
 
             CustomTextField(value = categoria, onValueChange = { categoria = it }, label = "Categoria")
-
             CustomTextField(value = descricao, onValueChange = { descricao = it }, label = "Descrição", singleLine = false, minLines = 3)
-
             CustomTextField(value = imagemUrl, onValueChange = { imagemUrl = it }, label = "URL da Imagem")
 
             HorizontalDivider(color = LightGray, modifier = Modifier.padding(vertical = 8.dp))
