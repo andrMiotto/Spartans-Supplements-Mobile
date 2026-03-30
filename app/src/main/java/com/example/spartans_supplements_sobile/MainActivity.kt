@@ -13,6 +13,7 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.login.LoginScreenFuntion
 import com.example.spartans_supplements_sobile.screens.CartScreen
+import com.example.spartans_supplements_sobile.screens.RegisterProductScreen
 import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
 import com.example.spartans_supplements_sobile.screens.UpdateProductScreen
@@ -47,6 +48,10 @@ class MainActivity : ComponentActivity() {
 
                         composable("cart") {
                             CartScreen(navController)
+                        }
+
+                        composable("register_product") {
+                            RegisterProductScreen(navController)
                         }
 
                         composable("detail/{id}") { backStackEntry ->

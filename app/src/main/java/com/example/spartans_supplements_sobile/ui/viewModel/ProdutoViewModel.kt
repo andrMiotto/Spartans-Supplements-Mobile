@@ -18,6 +18,19 @@ class ProdutoViewModel : ViewModel() {
     var produtos by mutableStateOf<List<ProdutoResponse>>(emptyList())
         private set
 
+    fun createProduct(produtoRequest: ProdutoRequest, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = repository.createProduct(produtoRequest)
+                if (response != null) {
+                    listarProdutos()
+                    onSuccess()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     fun listarProdutos() {
         viewModelScope.launch {

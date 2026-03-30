@@ -18,7 +18,7 @@ class ProdutoRepository {
         return if (response.isSuccessful) response.body() else null
     }
 
-    suspend fun create(produto: ProdutoRequest): ProdutoResponse? {
+    suspend fun createProduct(produto: ProdutoRequest): ProdutoResponse? {
         val response = RetrofitClient.apiService.createProduct(produto)
         return if (response.isSuccessful) response.body() else null
     }
