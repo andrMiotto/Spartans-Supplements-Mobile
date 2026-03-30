@@ -1,4 +1,4 @@
-    package com.example.spartans_supplements_sobile
+package com.example.spartans_supplements_sobile
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -45,8 +45,10 @@ class MainActivity : ComponentActivity() {
                         composable("cart") {
                             CartScreen(navController)
                         }
-                        composable("detail") {
-                            DetailScreen(navController)
+
+                        composable("detail/{id}") { backStackEntry ->
+                            val id = backStackEntry.arguments?.getString("id")?.toLong() ?: 0L
+                            DetailScreen(navController, id)
                         }
                     }
                 }

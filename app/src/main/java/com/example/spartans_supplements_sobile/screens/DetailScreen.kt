@@ -22,24 +22,33 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
+import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 
 private val Black = Color(0xFF0D0D0D)
 private val OffWhite = Color(0xFFF8F7F4)
 private val LightGray = Color(0xFFE8E8E8)
 private val MediumGray = Color(0xFF9E9E9E)
-private val AccentOrange = Color(0xFFFF6B2B)
 private val TagBg = Color(0xFFF0EDE8)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
-
+fun DetailScreen(
+    navController: NavHostController,
+    id: Long,
+    viewModel: ProdutoViewModel = viewModel()
+) {
     var quantity by remember { mutableStateOf(1) }
+
+    LaunchedEffect(id) {
+        viewModel.findById(id)
+    }
+
+    val produto = viewModel.produto
 
     Scaffold(
         topBar = {
@@ -153,137 +162,151 @@ fun DetailScreen(navController: NavHostController) {
         containerColor = OffWhite
     ) { paddingValues ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-        ) {
-
+        if (produto == null) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(280.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color(0xFFEDEBE6), Color(0xFFF8F7F4))
-                        )
-                    ),
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.whey_spartans),
-                    contentDescription ="whey",
-                    modifier = Modifier.size(300.dp)
-                )            }
-
+                CircularProgressIndicator(color = Black)
+            }
+        } else {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
             ) {
 
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Tag(text = "Proteínas")
-                    Tag(text = "Isolado")
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(280.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color(0xFFEDEBE6), Color(0xFFF8F7F4))
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.whey_spartans),
+                        contentDescription = produto.nome,
+                        modifier = Modifier.size(300.dp)
+                    )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = "MUSCLEPRO",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Red,
-                    letterSpacing = 2.sp
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = "Premium Whey\nProtein Isolate",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Black,
-                    lineHeight = 32.sp
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Column(
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
                 ) {
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Tag(text = produto.categoria)
+                        Tag(text = "${produto.peso}kg")
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     Text(
-                        text = "R$ 45,99",
+                        text = "SPARTANS",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Red,
+                        letterSpacing = 2.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = produto.nome,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Black,
+                        lineHeight = 32.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Text(
+                        text = "R$ ${"%.2f".format(produto.preco)}",
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Black,
                         color = Black
                     )
-                    Text(
-                        text = "R$ 59,99",
-                        fontSize = 15.sp,
-                        color = MediumGray,
-                        textDecoration = TextDecoration.LineThrough,
-                        modifier = Modifier.padding(bottom = 2.dp)
-                    )
-                }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Red)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(if (produto.quantidadeEstoque > 0) Color(0xFF2E7D32) else Color.Red)
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = if (produto.quantidadeEstoque > 0) "Em estoque: ${produto.quantidadeEstoque}" else "Sem estoque",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(color = LightGray, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(20.dp))
+
                     Text(
-                        text = "23% OFF",
-                        fontSize = 12.sp,
+                        text = "Descrição",
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Black
                     )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = produto.descricao,
+                        fontSize = 14.sp,
+                        color = MediumGray,
+                        lineHeight = 22.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = "Informações",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Black
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        NutritionCard(label = "Peso", value = "${produto.peso}kg", modifier = Modifier.weight(1f))
+                        NutritionCard(label = "Estoque", value = "${produto.quantidadeEstoque}", modifier = Modifier.weight(1f))
+                        NutritionCard(label = "Preço", value = "R$${"%.0f".format(produto.preco)}", modifier = Modifier.weight(1f))
+
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        NutritionCard(label = "Calorias", value = "${"%.0f".format(produto.calorias)}", modifier = Modifier.weight(1f))
+                        NutritionCard(label = "Carboidratos", value = "${"%.0f".format(produto.carboidratos)}", modifier = Modifier.weight(1f))
+                        NutritionCard(label = "Proteinas", value = "${"%.0f".format(produto.proteinas)}", modifier = Modifier.weight(1f))
+
+
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-                Divider(color = LightGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text(
-                    text = "Descrição",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Black
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "Proteína isolada de alta qualidade desenvolvida para acelerar o ganho muscular e a recuperação pós-treino. Cada porção contém 25g de proteína, zero açúcar e baixo teor de carboidratos. Ideal para shakes pós-treino ou suplementação diária.",
-                    fontSize = 14.sp,
-                    color = MediumGray,
-                    lineHeight = 22.sp
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "Informações por porção",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Black
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    NutritionCard(label = "Proteína", value = "25g", modifier = Modifier.weight(1f))
-                    NutritionCard(label = "Carboidratos", value = "2g", modifier = Modifier.weight(1f))
-                    NutritionCard(label = "Calorias", value = "130", modifier = Modifier.weight(1f))
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }

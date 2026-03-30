@@ -75,7 +75,6 @@ fun StoreHomeScreen(
         products.groupBy { it.categoria }
     }
 
-    // DIÁLOGO DE CONFIRMAÇÃO
     if (showDeleteDialog && productToDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
@@ -118,6 +117,36 @@ fun StoreHomeScreen(
         ) {
             item { Box(modifier = Modifier.padding(16.dp)) { HeroBanner() } }
 
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                ) {
+                    HeroBanner()
+
+                    Surface(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(32.dp)
+                            .clickable { showDialog = true },
+                        shape = CircleShape,
+                        color = Color.White,
+                        shadowElevation = 4.dp
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = "Delete",
+                                tint = Color(0xFFE53935),
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
             categorias.forEach { (categoria, produtosDaCategoria) ->
                 item { CategoryHeader(titulo = categoria) }
                 item {
@@ -129,10 +158,7 @@ fun StoreHomeScreen(
                             ProductCard(
                                 product = product,
                                 modifier = Modifier.width(170.dp),
-                                onDeleteClick = {
-                                    productToDelete = product
-                                    showDeleteDialog = true
-                                }
+                                onClick = { navController.navigate("detail/${product.id}") }
                             )
                         }
                     }
@@ -144,15 +170,96 @@ fun StoreHomeScreen(
 }
 
 @Composable
-fun ProductCard(
-    product: Product,
-    modifier: Modifier = Modifier,
-    onDeleteClick: () -> Unit
-) {
+fun CategoryHeader(titulo: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(20.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(Color.Black)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = titulo,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Black
+            )
+        }
+        Text(
+            text = "Ver todos",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
+        )
+    }
+}
+
+
+@Composable
+fun HeroBanner(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .clip(RoundedCornerShape(16.dp))
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.black_square),
+            contentDescription = "Banner",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Start simple\nwith everyday\nsupplements",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = 28.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Whey, creatine and essentials\nfor your first routine.",
+                    color = Color.White.copy(alpha = 0.8f),
+                    fontSize = 12.sp
+                )
+            }
+            Button(
+                onClick = { },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Shop now", color = Color.Black, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProductCard(product: Product, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = modifier.border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = modifier
+            .border(1.dp, Color(0xFFE8E8E8), RoundedCornerShape(12.dp))
+            .clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
 
@@ -196,7 +303,7 @@ fun ProductCard(
 
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { },
+                onClick = { onClick() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
