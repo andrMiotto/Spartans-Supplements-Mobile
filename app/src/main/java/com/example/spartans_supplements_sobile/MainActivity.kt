@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
@@ -18,53 +19,50 @@ import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
 import com.example.spartans_supplements_sobile.screens.UpdateProductScreen
 import com.example.spartans_supplements_sobile.ui.theme.SpartansSupplementsSobileTheme
+import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             SpartansSupplementsSobileTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "home") {
 
+                    val produtoViewModel: ProdutoViewModel = viewModel()
+
+                    NavHost(navController = navController, startDestination = "home") {
                         composable("login") {
                             LoginScreenFuntion(navController)
                         }
-
                         composable("register") {
                             RegisterScreenFuntion(navController)
                         }
-
                         composable("home") {
-                            StoreHomeScreen(navController)
+                            // Passamos o ViewModel para a Home
+                            StoreHomeScreen(navController, produtoViewModel)
                         }
-
                         composable("cart") {
-                            CartScreen(navController)
-                        }
 
+                            CartScreen(navController, produtoViewModel)
+                        }
                         composable("register_product") {
-                            RegisterProductScreen(navController)
+                            RegisterProductScreen(navController, produtoViewModel)
                         }
-
                         composable("detail/{id}") { backStackEntry ->
                             val id = backStackEntry.arguments?.getString("id")?.toLong() ?: 0L
-                            DetailScreen(navController, id)
+                            DetailScreen(navController, id, produtoViewModel)
                         }
-
                         composable(
                             route = "update_product/{id}",
                             arguments = listOf(navArgument("id") { type = NavType.LongType })
                         ) { backStackEntry ->
                             val id = backStackEntry.arguments?.getLong("id") ?: 0L
-                            UpdateProductScreen(navController, id)
+                            UpdateProductScreen(navController, id, produtoViewModel)
                         }
                     }
                 }

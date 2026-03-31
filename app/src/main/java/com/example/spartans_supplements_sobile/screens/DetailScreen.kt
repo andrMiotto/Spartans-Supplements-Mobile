@@ -69,13 +69,13 @@ fun DetailScreen(
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("update_product/$id") }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar", tint = Black)
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit", tint = Black)
                     }
                     IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Favoritar", tint = Black)
+                        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Favorite", tint = Black)
                     }
                     IconButton(onClick = { navController.navigate("cart") }) {
-                        Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = "Carrinho", tint = Black)
+                        Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = "Cart", tint = Black)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = OffWhite)
@@ -89,6 +89,7 @@ fun DetailScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Row(
                         modifier = Modifier.border(1.5.dp, LightGray, RoundedCornerShape(12.dp)).padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -102,13 +103,22 @@ fun DetailScreen(
                             modifier = Modifier.clickable { quantity++ })
                     }
 
+
                     Button(
-                        onClick = { },
+                        onClick = {
+                            produto?.let { prod ->
+
+                                viewModel.adicionarAoCarrinho(prod, quantity)
+
+
+                                navController.navigate("cart")
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Black),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.weight(1f).height(52.dp)
                     ) {
-                        Text(text = "Adicionar ao Carrinho", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 }
             }
@@ -158,7 +168,7 @@ fun DetailScreen(
                         .background(if (produto.quantidadeEstoque > 0) Color(0xFF2E7D32) else Color.Red)
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
-                        Text(text = if (produto.quantidadeEstoque > 0) "Em estoque: ${produto.quantidadeEstoque}" else "Sem estoque",
+                        Text(text = if (produto.quantidadeEstoque > 0) "In Stock: ${produto.quantidadeEstoque}" else "No stock",
                             fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     }
 
@@ -166,12 +176,12 @@ fun DetailScreen(
                     HorizontalDivider(color = LightGray, thickness = 1.dp)
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Descrição", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(text = "Description", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = produto.descricao, fontSize = 14.sp, color = MediumGray, lineHeight = 22.sp)
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    Text(text = "Informações", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(text = "Informations", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
@@ -179,17 +189,17 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         NutritionCard(
-                            label = "Peso",
+                            label = "Weight",
                             value = "${produto.peso}kg",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Estoque",
+                            label = "Stock",
                             value = "${produto.quantidadeEstoque}",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Preço",
+                            label = "Price",
                             value = "R$${"%.0f".format(produto.preco)}",
                             modifier = Modifier.weight(1f)
                         )
@@ -202,17 +212,17 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         NutritionCard(
-                            label = "Calorias",
+                            label = "Calories",
                             value = "${"%.0f".format(produto.calorias)}",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Carboidratos",
+                            label = "Carbs",
                             value = "${"%.0f".format(produto.carboidratos)}",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Proteinas",
+                            label = "Proteins",
                             value = "${"%.0f".format(produto.proteinas)}",
                             modifier = Modifier.weight(1f)
                         )
