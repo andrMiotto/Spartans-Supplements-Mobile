@@ -1,6 +1,7 @@
 package com.example.spartans_supplements_sobile.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.spartans_supplements_sobile.MainActivity
 import com.example.spartans_supplements_sobile.model.dto.usuario.UsuarioRequest
 import com.example.spartans_supplements_sobile.network.RetrofitClient
 import com.google.gson.Gson
@@ -211,7 +213,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = dataNascimento,
                                 onValueChange = { dataNascimento = it },
-                                placeholder = { Text("02/02/2000") },
+                                placeholder = { Text("AAAA-MM-DD") },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -291,6 +293,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         item {
 
                             val scope = rememberCoroutineScope()
+                            val context = LocalContext.current
                             Button(
                                 onClick = {
 
@@ -307,12 +310,20 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                                 println("Sucesso: $user")
 
                                                 withContext(Dispatchers.Main) {
+                                                    Toast.makeText(context, "Usuario Salvo com Sucesso!", Toast.LENGTH_SHORT).show()
+                                                }
+
+                                                withContext(Dispatchers.Main) {
                                                     navController.navigate("home")
                                                 }
 
                                             } else {
                                                 val error = response.errorBody()?.string()
                                                 println("Erro API: $error")
+
+                                                withContext(Dispatchers.Main) {
+                                                    Toast.makeText(context, "Dados incorretos, segue o exemplo!", Toast.LENGTH_SHORT).show()
+                                                }
 
                                                 Log.d("JSON", Gson().toJson(
                                                     UsuarioRequest(nome, email, password, telefone, endereco, cpf, dataNascimento)
