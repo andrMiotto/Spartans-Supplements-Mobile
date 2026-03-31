@@ -35,7 +35,7 @@ fun RegisterProductScreen(
     navController: NavHostController,
     viewModel: ProdutoViewModel = viewModel()
 ) {
-    // Estados vazios para criação
+    
     var nome by remember { mutableStateOf("") }
     var preco by remember { mutableStateOf("") }
     var descricao by remember { mutableStateOf("") }
@@ -53,11 +53,11 @@ fun RegisterProductScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Box(modifier = Modifier.size(38.dp).clip(CircleShape).background(LightGray), contentAlignment = Alignment.Center) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Black)
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Return", tint = Black)
                         }
                     }
                 },
-                title = { Text("Novo Produto", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black) },
+                title = { Text("New Product", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = OffWhite)
             )
         },
@@ -91,7 +91,7 @@ fun RegisterProductScreen(
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text("Cadastrar Produto", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text("Register product", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
         },
@@ -103,28 +103,28 @@ fun RegisterProductScreen(
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextField(value = nome, onValueChange = { nome = it }, label = "Nome do Produto")
+            CustomTextField(value = nome, onValueChange = { nome = it }, label = "product name")
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = preco, onValueChange = { preco = it }, label = "Preço (R$)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = estoque, onValueChange = { estoque = it }, label = "Estoque Inicial", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Number)
+                CustomTextField(value = preco, onValueChange = { preco = it }, label = "price (R$)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = estoque, onValueChange = { estoque = it }, label = "initial stock", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Number)
             }
 
-            CustomTextField(value = categoria, onValueChange = { categoria = it }, label = "Categoria (ex: Proteínas, Creatinas)")
-            CustomTextField(value = descricao, onValueChange = { descricao = it }, label = "Descrição Completa", singleLine = false, minLines = 3)
-            CustomTextField(value = imagemUrl, onValueChange = { imagemUrl = it }, label = "URL da Imagem")
+            CustomTextField(value = categoria, onValueChange = { categoria = it }, label = "Category (ex: Proteínas, Creatinas)")
+            CustomTextField(value = descricao, onValueChange = { descricao = it }, label = "Full description", singleLine = false, minLines = 3)
+            CustomTextField(value = imagemUrl, onValueChange = { imagemUrl = it }, label = "Image URL")
 
             HorizontalDivider(color = LightGray, modifier = Modifier.padding(vertical = 8.dp))
             Text("Especificações Técnicas", fontWeight = FontWeight.Bold, color = Black)
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = peso, onValueChange = { peso = it }, label = "Peso (kg)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = calorias, onValueChange = { calorias = it }, label = "Calorias", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = peso, onValueChange = { peso = it }, label = "Weight (kg)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = calorias, onValueChange = { calorias = it }, label = "Calories", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = proteinas, onValueChange = { proteinas = it }, label = "Proteínas (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = carboidratos, onValueChange = { carboidratos = it }, label = "Carbos (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = proteinas, onValueChange = { proteinas = it }, label = "Proteins (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = carboidratos, onValueChange = { carboidratos = it }, label = "Carbs (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
             }
 
             Spacer(modifier = Modifier.height(30.dp))
