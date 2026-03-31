@@ -1,6 +1,7 @@
 package com.example.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
@@ -136,6 +138,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val context = LocalContext.current
                     val scope = rememberCoroutineScope()
                     Button(
                         onClick = {
@@ -153,11 +156,16 @@ fun LoginScreenFuntion(navController: NavHostController) {
                                         val success = response.body()
 
                                         if (success == true) {
-
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Logado com Sucesso!", Toast.LENGTH_SHORT).show()
+                                            }
                                             navController.navigate("home")
 
                                         } else {
                                             Log.e("LOGIN", "Email ou senha incorretos")
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Usuario ou senha Incorretos!", Toast.LENGTH_SHORT).show()
+                                            }
                                         }
 
                                     } else {
