@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +66,7 @@ fun DetailScreen(
                     }
                 },
                 title = {
-                    Text(text = "Detalhes", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black)
+                    Text(text = stringResource(R.string.title_details), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black)
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("update_product/$id") }) {
@@ -118,7 +119,7 @@ fun DetailScreen(
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.weight(1f).height(52.dp)
                     ) {
-                        Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(text = stringResource(R.string.btn_add_to_cart), fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 }
             }
@@ -154,7 +155,7 @@ fun DetailScreen(
                         Tag(text = "${produto.peso}kg")
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "SPARTANS", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Red, letterSpacing = 2.sp)
+                    Text(text = stringResource(R.string.brand_name), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Red, letterSpacing = 2.sp)
 
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -168,7 +169,7 @@ fun DetailScreen(
                         .background(if (produto.quantidadeEstoque > 0) Color(0xFF2E7D32) else Color.Red)
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
-                        Text(text = if (produto.quantidadeEstoque > 0) "In Stock: ${produto.quantidadeEstoque}" else "No stock",
+                        Text(text = if (produto.quantidadeEstoque > 0) stringResource(R.string.in_stock, produto.quantidadeEstoque) else stringResource(R.string.no_stock),
                             fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     }
 
@@ -176,12 +177,12 @@ fun DetailScreen(
                     HorizontalDivider(color = LightGray, thickness = 1.dp)
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Description", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(text = stringResource(R.string.title_description), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = produto.descricao, fontSize = 14.sp, color = MediumGray, lineHeight = 22.sp)
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    Text(text = "Informations", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(text = stringResource(R.string.title_informations), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
@@ -189,17 +190,17 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         NutritionCard(
-                            label = "Weight",
+                            label = stringResource(R.string.info_weight),
                             value = "${produto.peso}kg",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Stock",
+                            label = stringResource(R.string.info_stock),
                             value = "${produto.quantidadeEstoque}",
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Price",
+                            label = stringResource(R.string.info_price),
                             value = "R$${"%.0f".format(produto.preco)}",
                             modifier = Modifier.weight(1f)
                         )

@@ -1,7 +1,6 @@
 package com.example.spartans_supplements_sobile.screens
 
 
-
 import androidx.compose.foundation.Image
 
 import androidx.compose.foundation.background
@@ -47,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.text.font.FontWeight
 
@@ -69,7 +69,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 
-
 data class Product(
 
     val id: Long,
@@ -85,7 +84,6 @@ data class Product(
 )
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
@@ -99,7 +97,6 @@ fun StoreHomeScreen(
 ) {
 
     val produtosDaApi = viewModel.produtos
-
 
 
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -119,7 +116,6 @@ fun StoreHomeScreen(
         }
 
     }
-
 
 
     val products = remember(produtosDaApi) {
@@ -145,7 +141,6 @@ fun StoreHomeScreen(
     }
 
 
-
     val categorias = remember(products) {
 
         products.groupBy { it.categoria }
@@ -162,8 +157,9 @@ fun StoreHomeScreen(
 
             title = { Text(" ") },
 
-            text = { Text("Tem certeza que deseja deletar '${productToDelete?.name}'? Esta ação não pode ser desfeita.") },
-
+            text = {
+                Text(stringResource(id = R.string.dialog_delete_text, productToDelete?.name ?: ""))
+            },
             confirmButton = {
 
                 TextButton(
@@ -212,7 +208,11 @@ fun StoreHomeScreen(
 
                 title = {
 
-                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Icon", modifier = Modifier.height(40.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "Icon",
+                        modifier = Modifier.height(40.dp)
+                    )
 
                 },
 
@@ -239,7 +239,6 @@ fun StoreHomeScreen(
         ) {
 
 
-
             item { Box(modifier = Modifier.padding(16.dp)) { HeroBanner() } }
 
 
@@ -259,7 +258,6 @@ fun StoreHomeScreen(
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
-
 
 
                         items(produtosDaCategoria) { product ->
@@ -321,7 +319,6 @@ fun StoreHomeScreen(
 }
 
 
-
 @Composable
 
 fun CategoryHeader(titulo: String) {
@@ -374,8 +371,7 @@ fun CategoryHeader(titulo: String) {
 
         Text(
 
-            text = "Ver todos",
-
+            text = stringResource(R.string.see_all),
             fontSize = 13.sp,
 
             fontWeight = FontWeight.Medium,
@@ -387,7 +383,6 @@ fun CategoryHeader(titulo: String) {
     }
 
 }
-
 
 
 @Composable
@@ -434,7 +429,7 @@ fun HeroBanner(modifier: Modifier = Modifier) {
 
                 Text(
 
-                    text = "Start simple\nwith everyday\nsupplements",
+                    text = stringResource(R.string.hero_title),
 
                     color = Color.White,
 
@@ -450,8 +445,7 @@ fun HeroBanner(modifier: Modifier = Modifier) {
 
                 Text(
 
-                    text = "Whey, creatine and essentials\nfor your first routine.",
-
+                    text = stringResource(R.string.hero_subtitle),
                     color = Color.White.copy(alpha = 0.8f),
 
                     fontSize = 12.sp
@@ -470,7 +464,7 @@ fun HeroBanner(modifier: Modifier = Modifier) {
 
             ) {
 
-                Text("Shop now", color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.btn_shop_now), color = Color.Black, fontWeight = FontWeight.Bold)
 
             }
 
@@ -479,7 +473,6 @@ fun HeroBanner(modifier: Modifier = Modifier) {
     }
 
 }
-
 
 
 @Composable
@@ -511,7 +504,6 @@ fun ProductCard(
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color(0xFFF5F5F5))
             ) {
-
 
 
                 AsyncImage(
@@ -570,7 +562,13 @@ fun ProductCard(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(text = product.name, fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 2, modifier = Modifier.height(34.dp))
+            Text(
+                text = product.name,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 2,
+                modifier = Modifier.height(34.dp)
+            )
 
             Text(text = product.price, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
 
@@ -590,7 +588,7 @@ fun ProductCard(
 
             ) {
 
-                Text("Add to cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.btn_add_to_cart), fontSize = 12.sp, fontWeight = FontWeight.Bold)
 
             }
 
@@ -631,7 +629,15 @@ fun AddProductCard(
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(containerColor = Color.White) {
-        NavigationBarItem(icon = { Icon(Icons.Outlined.Home, null) }, label = { Text("Home") }, selected = true, onClick = {})
-        NavigationBarItem(icon = { Icon(Icons.Outlined.ShoppingCart, null) }, label = { Text("Cart") }, selected = false, onClick = { navController.navigate("cart") })
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.Home, null) },
+            label = { Text(stringResource(R.string.nav_home)) },
+            selected = true,
+            onClick = {})
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.ShoppingCart, null) },
+            label = { Text(stringResource(R.string.nav_cart)) },
+            selected = false,
+            onClick = { navController.navigate("cart") })
     }
 }
