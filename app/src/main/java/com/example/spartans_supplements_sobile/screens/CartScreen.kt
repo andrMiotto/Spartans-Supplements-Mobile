@@ -29,7 +29,9 @@ import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 @Composable
 fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
-    val cartItems by viewModel.cartItems.collectAsState()
+    val carrinho by viewModel.carrinho.collectAsState()
+    val itens = carrinho?.itens ?: emptyList()
+    val totalFinanceiro = carrinho?.total ?: 0.0
 
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
@@ -54,7 +56,8 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     color = Color(0xFF1A1C1E)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                val totalItens = cartItems.sumOf { it.quantity }
+
+                val totalItensCount = itens.sumOf { it.quantidade }
                 Text(
                     text = stringResource(R.string.cart_items_count, totalItens),
                     color = Color.Gray,
@@ -63,8 +66,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                 )
             }
 
-            if (cartItems.isEmpty()) {
-
+            if (itens.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -86,7 +88,6 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     }
                 }
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -94,14 +95,14 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 20.dp)
                 ) {
-                    items(cartItems) { item ->
+                    items(itens) { item ->
                         CartItemCard(
-                            name = item.name,
-                            priceTotal = item.price * item.quantity,
-                            imageUrl = item.imageUrl ?: "",
-                            quantity = item.quantity,
-                            onIncrease = { viewModel.alterarQuantidade(item.id, true) },
-                            onDecrease = { viewModel.alterarQuantidade(item.id, false) },
+                            name = item.produto.nome,
+                            priceTotal = item.produto.preco * item.quantidade,
+                            imageUrl = item.produto.imagemUrl ?: "",
+                            quantity = item.quantidade,
+                            onIncrease = { viewModel.alterarQuantidade(item.produto.id, true) },
+                            onDecrease = { viewModel.alterarQuantidade(item.produto.id, false) },
                             onRemove = { viewModel.removerDoCarrinho(item.id) }
                         )
                     }
@@ -170,7 +171,6 @@ fun CartItemCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     Text(
                         text = stringResource(R.string.price_brl, "%.2f".format(priceTotal)),
                         fontWeight = FontWeight.ExtraBold,
@@ -186,12 +186,11 @@ fun CartItemCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-
                             Text(
                                 text = "−",
                                 fontWeight = FontWeight.Bold,
                                 color = if (quantity > 1) Color.Black else Color.Gray,
-                                modifier = Modifier.clickable { onDecrease() }
+                                modifier = Modifier.clickable { if (quantity > 1) onDecrease() }
                             )
 
                             Text(text = quantity.toString(), fontWeight = FontWeight.Bold)

@@ -1,5 +1,6 @@
 package com.example.spartans_supplements_sobile.network
 
+import com.example.spartans_supplements_sobile.model.dto.carrinho.CarrinhoResponse
 import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoRequest
 import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoResponse
 import com.example.spartans_supplements_sobile.model.dto.usuario.LoginRequest
@@ -66,5 +67,25 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+
+    // ================= CARRINHO =================
+
+    @POST("carrinho/create/{usuarioId}")
+    suspend fun createCart(
+        @Path("usuarioId") usuarioId: Long
+    ): Response<CarrinhoResponse>
+
+    @POST("carrinho/add/{idCarrinho}/{idProduct}/{quantidade}")
+    suspend fun addProduct(
+        @Path("idCarrinho") idCarrinho: Long,
+        @Path("idProduct") idProduct: Long,
+        @Path("quantidade") quantidade: Int
+    ): Response<CarrinhoResponse>
+
+    @DELETE("carrinho/remove/{idCarrinho}/{item}")
+    suspend fun removeProduct(
+        @Path("idCarrinho") idCarrinho: Long,
+        @Path("item") itemId: Long
+    ): Response<CarrinhoResponse>
 
 }
