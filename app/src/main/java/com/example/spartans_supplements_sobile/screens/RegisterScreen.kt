@@ -23,17 +23,15 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.rememberCoroutineScope
-import com.example.spartans_supplements_sobile.MainActivity
 import com.example.spartans_supplements_sobile.model.dto.usuario.UsuarioRequest
 import com.example.spartans_supplements_sobile.network.RetrofitClient
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
 
 @Composable
 fun RegisterScreenFuntion(navController: NavHostController) {
@@ -70,7 +68,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo Spartans",
+                contentDescription = stringResource(id = R.string.cd_logo_spartans),
                 modifier = Modifier.height(80.dp)
             )
 
@@ -91,13 +89,12 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ){
                         Text(
-                            text = "Welcome Back",
+                            text = stringResource(id = R.string.auth_welcome_back),
                             fontSize = 28.sp, fontWeight = FontWeight(700),
-
-                            )
+                        )
                         Spacer(modifier = Modifier.height(7.dp))
                         Text(
-                            text = "Sign in to continue shopping",
+                            text = stringResource(id = R.string.auth_sign_in_subtitle),
                             fontSize = 17.sp,
                             color = Color.Gray
                         )
@@ -110,7 +107,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(25.dp))
 
                             Text(
-                                text = "Name",
+                                text = stringResource(id = R.string.label_name),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -119,7 +116,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = nome,
                                 onValueChange = { nome = it },
-                                placeholder = { Text("Nome") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_name)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -128,7 +125,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp),)
                             Text(
-                                text = "Email address",
+                                text = stringResource(id = R.string.label_email),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -137,7 +134,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = email,
                                 onValueChange = { email = it },
-                                placeholder = { Text("name@example.com") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_email)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -147,7 +144,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(25.dp))
 
                             Text(
-                                text = "Telefone",
+                                text = stringResource(id = R.string.label_phone),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -156,7 +153,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = telefone,
                                 onValueChange = { telefone = it },
-                                placeholder = { Text("47 999999-999") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_phone)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -166,7 +163,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(25.dp))
 
                             Text(
-                                text = "Endereço",
+                                text = stringResource(id = R.string.label_address),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -175,7 +172,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = endereco,
                                 onValueChange = { endereco = it },
-                                placeholder = { Text("Rua Exemplo , Cidade , Estado") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_address)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -185,7 +182,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(25.dp))
 
                             Text(
-                                text = "CPF",
+                                text = stringResource(id = R.string.label_cpf),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -194,7 +191,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = cpf,
                                 onValueChange = { cpf = it },
-                                placeholder = { Text("123.456.789-10") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_cpf)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -204,7 +201,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(25.dp))
 
                             Text(
-                                text = "Data Nascimento",
+                                text = stringResource(id = R.string.label_birthdate),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -213,7 +210,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
 
                                 value = dataNascimento,
                                 onValueChange = { dataNascimento = it },
-                                placeholder = { Text("AAAA-MM-DD") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_birthdate)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp)
                             )
@@ -223,7 +220,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp),)
                             Text(
-                                text = "Password",
+                                text = stringResource(id = R.string.label_password),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -233,14 +230,14 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                 onValueChange = { password = it },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp),
-                                placeholder = { Text("**********") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_password)) },
                                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     val icon =
                                         if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
                                     Icon(
                                         imageVector = icon,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(id = R.string.cd_toggle_password),
                                         modifier = Modifier.clickable {
                                             passwordVisible = !passwordVisible
                                         }
@@ -254,7 +251,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(20.dp),)
 
                             Text(
-                                text = "Confirm Password",
+                                text = stringResource(id = R.string.label_confirm_password),
                                 modifier = Modifier.fillMaxWidth(),
                                 fontWeight = FontWeight(600)
                             )
@@ -264,14 +261,14 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                 onValueChange = { passwordC = it },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp),
-                                placeholder = { Text("**********") },
+                                placeholder = { Text(stringResource(id = R.string.placeholder_password)) },
                                 visualTransformation = if (passwordVisibleC) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     val icon =
                                         if (passwordVisibleC) Icons.Default.Visibility else Icons.Default.VisibilityOff
                                     Icon(
                                         imageVector = icon,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(id = R.string.cd_toggle_password),
                                         modifier = Modifier.clickable {
                                             passwordVisibleC = !passwordVisibleC
                                         }
@@ -282,7 +279,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = "Forgot password?",
+                                text = stringResource(id = R.string.forgot_password),
                                 modifier = Modifier.align(Alignment.End),
                                 fontSize = 12.sp,
                                 color = Color.Gray
@@ -293,7 +290,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                         item {
 
                             val scope = rememberCoroutineScope()
-                            val context = LocalContext.current
+                            val localContext = LocalContext.current
                             Button(
                                 onClick = {
 
@@ -310,10 +307,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                                 println("Sucesso: $user")
 
                                                 withContext(Dispatchers.Main) {
-                                                    Toast.makeText(context, "Usuario Salvo com Sucesso!", Toast.LENGTH_SHORT).show()
-                                                }
-
-                                                withContext(Dispatchers.Main) {
+                                                    Toast.makeText(localContext, localContext.getString(R.string.toast_register_success), Toast.LENGTH_SHORT).show()
                                                     navController.navigate("home")
                                                 }
 
@@ -322,7 +316,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                                 println("Erro API: $error")
 
                                                 withContext(Dispatchers.Main) {
-                                                    Toast.makeText(context, "Dados incorretos, segue o exemplo!", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(localContext, localContext.getString(R.string.toast_register_error), Toast.LENGTH_SHORT).show()
                                                 }
 
                                                 Log.d("JSON", Gson().toJson(
@@ -345,7 +339,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                     containerColor = Color.Black
                                 )
                             ) {
-                                Text("Register", color = Color.White)
+                                Text(stringResource(id = R.string.btn_register), color = Color.White)
                             }
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -354,7 +348,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                 horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Don't have an account? ")
+                                Text(stringResource(id = R.string.auth_no_account))
                                 Button(
                                     onClick = { navController.navigate("login") },
                                     modifier = Modifier
@@ -369,7 +363,7 @@ fun RegisterScreenFuntion(navController: NavHostController) {
                                         contentAlignment = Alignment.TopCenter
                                     ) {
                                         Text(
-                                            text = "Login",
+                                            text = stringResource(id = R.string.btn_login),
                                             color = Color.Blue
                                         )
                                     }

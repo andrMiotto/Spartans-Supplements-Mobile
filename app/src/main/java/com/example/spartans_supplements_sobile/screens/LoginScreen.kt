@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import com.example.spartans_supplements_sobile.R
@@ -56,7 +57,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo Spartans",
+                contentDescription = stringResource(id = R.string.cd_logo_spartans),
                 modifier = Modifier.height(80.dp)
             )
 
@@ -77,49 +78,53 @@ fun LoginScreenFuntion(navController: NavHostController) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ){
                         Text(
-                            text = "Welcome Back",
+                            text = stringResource(id = R.string.login_welcome_back),
                             fontSize = 28.sp, fontWeight = FontWeight(700),
-
                         )
                         Spacer(modifier = Modifier.height(7.dp))
                         Text(
-                            text = "Sign in to continue shopping",
+                            text = stringResource(id = R.string.login_subtitle),
                             fontSize = 17.sp,
                             color = Color.Gray
                         )
                     }
 
-
-
                     Spacer(modifier = Modifier.height(28.dp))
 
-                    Text(text = "Email address", modifier = Modifier.fillMaxWidth(),fontWeight = FontWeight(600))
+                    Text(
+                        text = stringResource(id = R.string.login_email_label),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight(600)
+                    )
                     Spacer(modifier = Modifier.height(10.dp),)
                     OutlinedTextField(
-
                         value = email,
                         onValueChange = { email = it },
-                        placeholder = { Text("name@example.com") },
+                        placeholder = { Text(stringResource(id = R.string.login_email_placeholder)) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp)
                     )
 
                     Spacer(modifier = Modifier.height(30.dp),)
 
-                    Text(text = "Password",modifier = Modifier.fillMaxWidth(), fontWeight = FontWeight(600))
+                    Text(
+                        text = stringResource(id = R.string.login_password_label),
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight(600)
+                    )
                     Spacer(modifier = Modifier.height(10.dp),)
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
-                        placeholder = { Text("**********") },
+                        placeholder = { Text(stringResource(id = R.string.login_password_placeholder)) },
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             val icon = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
                             Icon(
                                 imageVector = icon,
-                                contentDescription = null,
+                                contentDescription = stringResource(id = R.string.cd_toggle_password),
                                 modifier = Modifier.clickable {
                                     passwordVisible = !passwordVisible
                                 }
@@ -130,7 +135,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "Forgot password?",
+                        text = stringResource(id = R.string.login_forgot_password),
                         modifier = Modifier.align(Alignment.End),
                         fontSize = 12.sp,
                         color = Color.Gray
@@ -157,14 +162,14 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
                                         if (success == true) {
                                             withContext(Dispatchers.Main) {
-                                                Toast.makeText(context, "Logado com Sucesso!", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, context.getString(R.string.login_toast_success), Toast.LENGTH_SHORT).show()
                                             }
                                             navController.navigate("home")
 
                                         } else {
                                             Log.e("LOGIN", "Email ou senha incorretos")
                                             withContext(Dispatchers.Main) {
-                                                Toast.makeText(context, "Usuario ou senha Incorretos!", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, context.getString(R.string.login_toast_error), Toast.LENGTH_SHORT).show()
                                             }
                                         }
 
@@ -185,7 +190,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                             containerColor = Color.Black
                         )
                     ) {
-                        Text("Sign In", color = Color.White)
+                        Text(stringResource(id = R.string.btn_sign_in), color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -194,12 +199,12 @@ fun LoginScreenFuntion(navController: NavHostController) {
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Don't have an account? ")
+                        Text(stringResource(id = R.string.login_no_account))
                         Button(
                             onClick = {navController.navigate("register")},
                             modifier = Modifier
                                 .height(27.dp)
-                                .width(55.dp),
+                                .width(65.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White
                             ),  contentPadding = PaddingValues(0.dp)
@@ -209,7 +214,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                                 contentAlignment = Alignment.TopCenter
                             ) {
                                 Text(
-                                    text = "Register",
+                                    text = stringResource(id = R.string.btn_register),
                                     color = Color.Blue
                                 )
                             }
