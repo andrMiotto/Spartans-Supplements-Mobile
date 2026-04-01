@@ -29,9 +29,9 @@ import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 @Composable
 fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
-    val carrinho by viewModel.carrinho.collectAsState()
-    val itens = carrinho?.itens ?: emptyList()
-    val totalFinanceiro = carrinho?.total ?: 0.0
+    val carrinhoState by viewModel.carrinho.collectAsState()
+    // Pegamos a lista de itens (se o carrinho for nulo, usamos uma lista vazia)
+    val cartItems = carrinhoState?.itens ?: emptyList()
 
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
@@ -56,17 +56,17 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     color = Color(0xFF1A1C1E)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-
-                val totalItensCount = itens.sumOf { it.quantidade }
+                val totalItens = cartItems.sumOf { it.quantidade }
                 Text(
-                    text = stringResource(R.string.cart_items_count, totalItensCount),
+                    text = stringResource(R.string.cart_items_count, totalItens),
                     color = Color.Gray,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
 
-            if (itens.isEmpty()) {
+            if (cartItems.isEmpty()) {
+
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -81,13 +81,21 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                             tint = Color.LightGray
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(stringResource(R.string.cart_empty_msg), fontSize = 18.sp, color = Color.Gray)
+                        Text(
+                            stringResource(R.string.cart_empty_msg),
+                            fontSize = 18.sp,
+                            color = Color.Gray
+                        )
                         TextButton(onClick = { navController.navigate("home") }) {
-                            Text(stringResource(R.string.btn_keep_buying), color = Color(0xFF0D6B39))
+                            Text(
+                                stringResource(R.string.btn_keep_buying),
+                                color = Color(0xFF0D6B39)
+                            )
                         }
                     }
                 }
             } else {
+
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -95,20 +103,22 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 20.dp)
                 ) {
-                    items(itens) { item ->
+                    items(cartItems) { item ->
                         CartItemCard(
                             name = item.produto.nome,
                             priceTotal = item.produto.preco * item.quantidade,
                             imageUrl = item.produto.imagemUrl ?: "",
                             quantity = item.quantidade,
+                            // Olha o ID correto aqui:
                             onIncrease = { viewModel.alterarQuantidade(item.produto.id, true) },
                             onDecrease = { viewModel.alterarQuantidade(item.produto.id, false) },
-                            onRemove = { viewModel.removerDoCarrinho(item.id) }
+                            onRemove = { viewModel.removerDoCarrinho(item.produto.id) }
                         )
                     }
                 }
             }
 
+            val totalFinanceiro = cartItems.sumOf { it.produto.preco * it.quantidade }
             CartSummarySection(totalFinanceiro.toString(), navController)
         }
     }
@@ -159,7 +169,11 @@ fun CartItemCard(
                 ) {
                     Text(name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
                     IconButton(onClick = onRemove, modifier = Modifier.size(24.dp)) {
-                        Icon(Icons.Default.Delete, stringResource(id = R.string.cd_delete), tint = Color.LightGray)
+                        Icon(
+                            Icons.Default.Delete,
+                            stringResource(id = R.string.cd_delete),
+                            tint = Color.LightGray
+                        )
                     }
                 }
 
@@ -170,6 +184,7 @@ fun CartItemCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(
                         text = stringResource(R.string.price_brl, "%.2f".format(priceTotal)),
                         fontWeight = FontWeight.ExtraBold,
@@ -185,11 +200,12 @@ fun CartItemCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
+
                             Text(
                                 text = "−",
                                 fontWeight = FontWeight.Bold,
                                 color = if (quantity > 1) Color.Black else Color.Gray,
-                                modifier = Modifier.clickable { if (quantity > 1) onDecrease() }
+                                modifier = Modifier.clickable { onDecrease() }
                             )
 
                             Text(text = quantity.toString(), fontWeight = FontWeight.Bold)
@@ -220,8 +236,14 @@ fun CartSummarySection(totalPrice: String, navController: NavHostController) {
         shadowElevation = 12.dp
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            SummaryRow(stringResource(R.string.cart_subtotal), stringResource(R.string.price_brl, formattedTotal))
-            SummaryRow(stringResource(R.string.cart_shipping), stringResource(R.string.cart_shipping_free))
+            SummaryRow(
+                stringResource(R.string.cart_subtotal),
+                stringResource(R.string.price_brl, formattedTotal)
+            )
+            SummaryRow(
+                stringResource(R.string.cart_shipping),
+                stringResource(R.string.cart_shipping_free)
+            )
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -232,14 +254,22 @@ fun CartSummarySection(totalPrice: String, navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(stringResource(R.string.cart_total), fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text(stringResource(R.string.price_brl, formattedTotal), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    stringResource(R.string.cart_total),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Text(
+                    stringResource(R.string.price_brl, formattedTotal),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { },
+                onClick = { navController.navigate("checkout") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -247,7 +277,11 @@ fun CartSummarySection(totalPrice: String, navController: NavHostController) {
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.btn_checkout), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        stringResource(R.string.btn_checkout),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.Default.KeyboardArrowRight, null)
                 }

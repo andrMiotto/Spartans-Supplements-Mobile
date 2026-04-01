@@ -88,4 +88,6 @@ interface ApiService {
         @Path("item") itemId: Long
     ): Response<CarrinhoResponse>
 
+    @GET("user/list")
+    suspend fun listUsers(): Response<List<UsuarioResponse>>
 }

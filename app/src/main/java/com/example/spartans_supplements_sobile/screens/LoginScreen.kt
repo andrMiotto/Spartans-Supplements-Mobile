@@ -1,5 +1,6 @@
 package com.example.login
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -44,15 +45,12 @@ fun LoginScreenFuntion(navController: NavHostController) {
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
-
             Spacer(modifier = Modifier.height(80.dp))
 
             Image(
@@ -67,19 +65,16 @@ fun LoginScreenFuntion(navController: NavHostController) {
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier.fillMaxWidth()
-
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(7.dp))
-                    Column (
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = stringResource(id = R.string.login_welcome_back),
-                            fontSize = 28.sp, fontWeight = FontWeight(700),
+                            fontSize = 28.sp, fontWeight = FontWeight(700)
                         )
                         Spacer(modifier = Modifier.height(7.dp))
                         Text(
@@ -96,7 +91,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth(),
                         fontWeight = FontWeight(600)
                     )
-                    Spacer(modifier = Modifier.height(10.dp),)
+                    Spacer(modifier = Modifier.height(10.dp))
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
@@ -105,14 +100,14 @@ fun LoginScreenFuntion(navController: NavHostController) {
                         shape = RoundedCornerShape(10.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(30.dp),)
+                    Spacer(modifier = Modifier.height(30.dp))
 
                     Text(
                         text = stringResource(id = R.string.login_password_label),
                         modifier = Modifier.fillMaxWidth(),
                         fontWeight = FontWeight(600)
                     )
-                    Spacer(modifier = Modifier.height(10.dp),)
+                    Spacer(modifier = Modifier.height(10.dp))
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -125,9 +120,7 @@ fun LoginScreenFuntion(navController: NavHostController) {
                             Icon(
                                 imageVector = icon,
                                 contentDescription = stringResource(id = R.string.cd_toggle_password),
-                                modifier = Modifier.clickable {
-                                    passwordVisible = !passwordVisible
-                                }
+                                modifier = Modifier.clickable { passwordVisible = !passwordVisible }
                             )
                         }
                     )
@@ -145,50 +138,50 @@ fun LoginScreenFuntion(navController: NavHostController) {
 
                     val context = LocalContext.current
                     val scope = rememberCoroutineScope()
+
                     Button(
                         onClick = {
                             scope.launch {
-
                                 try {
                                     val response = withContext(Dispatchers.IO) {
-                                        RetrofitClient.apiService.login(
-                                            LoginRequest(email, password)
-                                        )
+                                        RetrofitClient.apiService.login(LoginRequest(email, password))
                                     }
 
-                                    if (response.isSuccessful) {
+                                    if (response.isSuccessful && response.body() == true) {
+                                        // Busca todos os usuários e filtra pelo email
+                                        val usuariosResponse = withContext(Dispatchers.IO) {
+                                            RetrofitClient.apiService.listUsers()
+                                        }
 
-                                        val success = response.body()
-
-                                        if (success == true) {
-                                            withContext(Dispatchers.Main) {
-                                                Toast.makeText(context, context.getString(R.string.login_toast_success), Toast.LENGTH_SHORT).show()
-                                            }
-                                            navController.navigate("home")
-
-                                        } else {
-                                            Log.e("LOGIN", "Email ou senha incorretos")
-                                            withContext(Dispatchers.Main) {
-                                                Toast.makeText(context, context.getString(R.string.login_toast_error), Toast.LENGTH_SHORT).show()
+                                        if (usuariosResponse.isSuccessful) {
+                                            val usuario = usuariosResponse.body()?.find { it.email == email }
+                                            if (usuario != null) {
+                                                // Salva o ID no SharedPreferences
+                                                val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                                prefs.edit().putLong("usuario_id", usuario.id).apply()
+                                                println("LOG: Usuário logado com ID: ${usuario.id}")
                                             }
                                         }
 
-                                    } else {
-                                        Log.e("LOGIN", "Erro API: ${response.errorBody()?.string()}")
-                                    }
+                                        withContext(Dispatchers.Main) {
+                                            Toast.makeText(context, context.getString(R.string.login_toast_success), Toast.LENGTH_SHORT).show()
+                                        }
+                                        navController.navigate("home")
 
+                                    } else {
+                                        Log.e("LOGIN", "Email ou senha incorretos")
+                                        withContext(Dispatchers.Main) {
+                                            Toast.makeText(context, context.getString(R.string.login_toast_error), Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
                                 } catch (e: Exception) {
                                     Log.e("LOGIN", "Erro: ${e.message}")
                                 }
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
                         shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Black
-                        )
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
                         Text(stringResource(id = R.string.btn_sign_in), color = Color.White)
                     }
@@ -201,22 +194,16 @@ fun LoginScreenFuntion(navController: NavHostController) {
                     ) {
                         Text(stringResource(id = R.string.login_no_account))
                         Button(
-                            onClick = {navController.navigate("register")},
-                            modifier = Modifier
-                                .height(27.dp)
-                                .width(65.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.White
-                            ),  contentPadding = PaddingValues(0.dp)
+                            onClick = { navController.navigate("register") },
+                            modifier = Modifier.height(27.dp).width(65.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.TopCenter
                             ) {
-                                Text(
-                                    text = stringResource(id = R.string.btn_register),
-                                    color = Color.Blue
-                                )
+                                Text(text = stringResource(id = R.string.btn_register), color = Color.Blue)
                             }
                         }
                     }
