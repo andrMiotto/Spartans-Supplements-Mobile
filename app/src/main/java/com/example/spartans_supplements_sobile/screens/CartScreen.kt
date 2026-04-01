@@ -109,7 +109,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
             }
 
             val totalFinanceiro = cartItems.sumOf { it.price * it.quantity }
-            CartSummarySection(totalFinanceiro.toString())
+            CartSummarySection(totalFinanceiro.toString(), navController)
         }
     }
 }
@@ -211,7 +211,7 @@ fun CartItemCard(
 }
 
 @Composable
-fun CartSummarySection(totalPrice: String) {
+fun CartSummarySection(totalPrice: String, navController: NavHostController) {
 
     val formattedTotal = "%.2f".format(totalPrice.toDoubleOrNull() ?: 0.0)
 
