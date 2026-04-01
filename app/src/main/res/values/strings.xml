@@ -1,11 +1,10 @@
-
-
 <resources>
     <string name="app_name">Spartans Supplements</string>
     <string name="nav_home">Home</string>
     <string name="nav_cart">Cart</string>
     <string name="see_all">See all</string>
     <string name="price_brl">R$ %1$s</string>
+
     <string name="cd_logo_icon">Icon</string>
     <string name="cd_logo_spartans">Spartans Logo</string>
     <string name="cd_banner">Banner</string>
@@ -15,8 +14,7 @@
     <string name="cd_edit">Edit</string>
     <string name="cd_favorite">Favorite</string>
     <string name="cd_cart">Cart</string>
-
-    <string name="categoria_outros">Others</string>
+    <string name="cd_toggle_password">Toggle password visibility</string> <string name="categoria_outros">Others</string>
     <string name="hero_title">Start simple\nwith everyday\nsupplements</string>
     <string name="hero_subtitle">Whey, creatine and essentials\nfor your first routine.</string>
     <string name="btn_shop_now">Shop now</string>
@@ -70,6 +68,17 @@
     <string name="placeholder_password">**********</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="auth_no_account">Don\'t have an account? </string>
+
+    <string name="login_welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Sign in to continue shopping</string>
+    <string name="login_email_label">Email address</string>
+    <string name="login_email_placeholder">name@example.com</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_placeholder">**********</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_toast_success">Logged in successfully!</string>
+    <string name="login_toast_error">Incorrect email or password!</string>
 
     <string name="btn_sign_in">Sign In</string>
     <string name="btn_register">Register</string>

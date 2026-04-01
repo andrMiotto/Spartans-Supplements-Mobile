@@ -48,7 +48,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = (stringResource(id = R.string.nav_cart)),
+                    text = stringResource(id = R.string.title_cart),
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF1A1C1E)
@@ -74,7 +74,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             Icons.Default.ShoppingCart,
-                            null,
+                            contentDescription = stringResource(id = R.string.cd_cart),
                             modifier = Modifier.size(64.dp),
                             tint = Color.LightGray
                         )
@@ -97,11 +97,9 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     items(cartItems) { item ->
                         CartItemCard(
                             name = item.name,
-
                             priceTotal = item.price * item.quantity,
                             imageUrl = item.imageUrl ?: "",
                             quantity = item.quantity,
-
                             onIncrease = { viewModel.alterarQuantidade(item.id, true) },
                             onDecrease = { viewModel.alterarQuantidade(item.id, false) },
                             onRemove = { viewModel.removerDoCarrinho(item.id) }
@@ -109,7 +107,6 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                     }
                 }
             }
-
 
             val totalFinanceiro = cartItems.sumOf { it.price * it.quantity }
             CartSummarySection(totalFinanceiro.toString())
@@ -162,7 +159,7 @@ fun CartItemCard(
                 ) {
                     Text(name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
                     IconButton(onClick = onRemove, modifier = Modifier.size(24.dp)) {
-                        Icon(Icons.Default.Delete, "Remove", tint = Color.LightGray)
+                        Icon(Icons.Default.Delete, stringResource(id = R.string.cd_delete), tint = Color.LightGray)
                     }
                 }
 
@@ -175,11 +172,10 @@ fun CartItemCard(
                 ) {
 
                     Text(
-                        text = "R$ ${"%.2f".format(priceTotal)}",
+                        text = stringResource(R.string.price_brl, "%.2f".format(priceTotal)),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp
                     )
-
 
                     Surface(
                         color = Color(0xFFF5F5F5),
@@ -199,7 +195,6 @@ fun CartItemCard(
                             )
 
                             Text(text = quantity.toString(), fontWeight = FontWeight.Bold)
-
 
                             Text(
                                 text = "+",
@@ -227,8 +222,8 @@ fun CartSummarySection(totalPrice: String) {
         shadowElevation = 12.dp
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            SummaryRow("Subtotal", "R$ $formattedTotal")
-            SummaryRow("Shipping", "Free")
+            SummaryRow(stringResource(R.string.cart_subtotal), stringResource(R.string.price_brl, formattedTotal))
+            SummaryRow(stringResource(R.string.cart_shipping), stringResource(R.string.cart_shipping_free))
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -239,8 +234,8 @@ fun CartSummarySection(totalPrice: String) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Total", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("$ $formattedTotal", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(stringResource(R.string.cart_total), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(stringResource(R.string.price_brl, formattedTotal), fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -254,7 +249,7 @@ fun CartSummarySection(totalPrice: String) {
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Proceed to Checkout", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.btn_checkout), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.Default.KeyboardArrowRight, null)
                 }
@@ -280,13 +275,13 @@ fun SummaryRow(label: String, value: String) {
 fun AppBottomNavigationBar(navController: NavHostController) {
     NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, "Home") },
+            icon = { Icon(Icons.Default.Home, stringResource(R.string.nav_home)) },
             label = { Text(stringResource(R.string.nav_home)) },
             selected = false,
             onClick = { navController.navigate("home") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.ShoppingCart, "Cart") },
+            icon = { Icon(Icons.Default.ShoppingCart, stringResource(R.string.cd_cart)) },
             label = { Text(stringResource(R.string.nav_cart)) },
             selected = true,
             onClick = {}

@@ -1,88 +1,48 @@
 package com.example.spartans_supplements_sobile.screens
 
-
 import androidx.compose.foundation.Image
-
 import androidx.compose.foundation.background
-
 import androidx.compose.foundation.border
-
 import androidx.compose.foundation.clickable
-
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.foundation.lazy.LazyColumn
-
 import androidx.compose.foundation.lazy.LazyRow
-
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.foundation.shape.CircleShape
-
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.material.icons.Icons
-
 import androidx.compose.material.icons.filled.AddCircle
-
 import androidx.compose.material.icons.outlined.Delete
-
 import androidx.compose.material.icons.outlined.Home
-
 import androidx.compose.material.icons.outlined.ShoppingCart
-
 import androidx.compose.material3.*
-
 import androidx.compose.runtime.*
-
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.draw.clip
-
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.layout.ContentScale
-
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-
 import androidx.compose.ui.text.font.FontWeight
-
 import androidx.compose.ui.unit.dp
-
 import androidx.compose.ui.unit.sp
-
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import androidx.navigation.NavHostController
-
 import coil.compose.AsyncImage
-
 import com.example.spartans_supplements_sobile.R
-
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
-
 import kotlinx.coroutines.delay
-
 import kotlinx.coroutines.isActive
 
 
 data class Product(
-
     val id: Long,
-
     val name: String,
-
     val price: String,
-
     val imageRes: String,
-
     val categoria: String
-
 )
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -155,7 +115,7 @@ fun StoreHomeScreen(
 
             onDismissRequest = { showDeleteDialog = false },
 
-            title = { Text(" ") },
+            title = { Text(stringResource(id = R.string.dialog_delete_title)) },
 
             text = {
                 Text(stringResource(id = R.string.dialog_delete_text, productToDelete?.name ?: ""))
@@ -174,8 +134,7 @@ fun StoreHomeScreen(
 
                 ) {
 
-                    Text("Yes, delete", color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
-
+                    Text(stringResource(id = R.string.dialog_delete_confirm), color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
                 }
 
             },
@@ -184,8 +143,7 @@ fun StoreHomeScreen(
 
                 TextButton(onClick = { showDeleteDialog = false }) {
 
-                    Text("Cancel", color = Color.Black)
-
+                    Text(stringResource(id = R.string.dialog_delete_cancel), color = Color.Black)
                 }
 
             },
@@ -210,7 +168,7 @@ fun StoreHomeScreen(
 
                     Image(
                         painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Icon",
+                        contentDescription = stringResource(id = R.string.cd_logo_icon),
                         modifier = Modifier.height(40.dp)
                     )
 
@@ -294,18 +252,11 @@ fun StoreHomeScreen(
 
                                 onClick = {
 
-// Certifique-se de que a rota no seu NavHost seja "register_product"
-
                                     navController.navigate("register_product")
-
                                 }
-
                             )
-
                         }
-
                     }
-
                 }
 
                 item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -405,8 +356,7 @@ fun HeroBanner(modifier: Modifier = Modifier) {
 
             painter = painterResource(id = R.drawable.black_square),
 
-            contentDescription = "Banner",
-
+            contentDescription = stringResource(id = R.string.cd_banner),
             contentScale = ContentScale.Crop,
 
             modifier = Modifier.fillMaxSize()
@@ -546,7 +496,7 @@ fun ProductCard(
 
                         imageVector = Icons.Outlined.Delete,
 
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(id = R.string.cd_delete),
 
                         tint = Color(0xFFE53935),
 
@@ -618,7 +568,7 @@ fun AddProductCard(
         ) {
             Icon(
                 imageVector = Icons.Default.AddCircle,
-                contentDescription = "Adicionar Produto",
+                contentDescription = stringResource(id = R.string.cd_add_product),
                 tint = Color.Black,
                 modifier = Modifier.size(80.dp)
             )
@@ -630,12 +580,12 @@ fun AddProductCard(
 fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(containerColor = Color.White) {
         NavigationBarItem(
-            icon = { Icon(Icons.Outlined.Home, null) },
+            icon = { Icon(Icons.Outlined.Home, stringResource(id = R.string.nav_home)) }, // Usei a própria string do label para o contentDescription
             label = { Text(stringResource(R.string.nav_home)) },
             selected = true,
             onClick = {})
         NavigationBarItem(
-            icon = { Icon(Icons.Outlined.ShoppingCart, null) },
+            icon = { Icon(Icons.Outlined.ShoppingCart, stringResource(id = R.string.cd_cart)) }, // Usando cd_cart aqui
             label = { Text(stringResource(R.string.nav_cart)) },
             selected = false,
             onClick = { navController.navigate("cart") })
