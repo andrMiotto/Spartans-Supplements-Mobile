@@ -18,6 +18,7 @@ import com.example.spartans_supplements_sobile.screens.CheckoutScreenFunction
 import com.example.spartans_supplements_sobile.screens.RegisterProductScreen
 import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
+import com.example.spartans_supplements_sobile.screens.SuccessScreen
 import com.example.spartans_supplements_sobile.screens.UpdateProductScreen
 import com.example.spartans_supplements_sobile.ui.theme.SpartansSupplementsSobileTheme
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             RegisterScreenFuntion(navController)
                         }
                         composable("home") {
-                            // Passamos o ViewModel para a Home
+
                             StoreHomeScreen(navController, produtoViewModel)
                         }
                         composable("cart") {
@@ -60,6 +61,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("checkout") {
                             CheckoutScreenFunction(produtoViewModel, navController)
+                        }
+                        composable("success") {
+                            SuccessScreen(navController)
                         }
                         composable(
                             route = "update_product/{id}",
