@@ -101,7 +101,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
 
             val totalFinanceiro = cartItems.sumOf { it.price * it.quantity }
-            CartSummarySection(totalFinanceiro.toString())
+            CartSummarySection(totalFinanceiro.toString(), navController)
         }
     }
 }
@@ -201,7 +201,7 @@ fun CartItemCard(
 }
 
 @Composable
-fun CartSummarySection(totalPrice: String) {
+fun CartSummarySection(totalPrice: String, navController: NavHostController) {
 
     val formattedTotal = "%.2f".format(totalPrice.toDoubleOrNull() ?: 0.0)
 
@@ -225,7 +225,9 @@ fun CartSummarySection(totalPrice: String) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {  },
+                onClick = {
+                    navController.navigate("checkout")
+                },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D6B39)),
                 shape = RoundedCornerShape(12.dp)

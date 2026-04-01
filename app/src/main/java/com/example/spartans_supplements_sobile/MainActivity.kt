@@ -14,6 +14,7 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.login.LoginScreenFuntion
 import com.example.spartans_supplements_sobile.screens.CartScreen
+import com.example.spartans_supplements_sobile.screens.CheckoutScreenFunction
 import com.example.spartans_supplements_sobile.screens.RegisterProductScreen
 import com.example.spartans_supplements_sobile.screens.RegisterScreenFuntion
 import com.example.spartans_supplements_sobile.screens.StoreHomeScreen
@@ -56,6 +57,9 @@ class MainActivity : ComponentActivity() {
                         composable("detail/{id}") { backStackEntry ->
                             val id = backStackEntry.arguments?.getString("id")?.toLong() ?: 0L
                             DetailScreen(navController, id, produtoViewModel)
+                        }
+                        composable("checkout") {
+                            CheckoutScreenFunction(produtoViewModel, navController)
                         }
                         composable(
                             route = "update_product/{id}",
