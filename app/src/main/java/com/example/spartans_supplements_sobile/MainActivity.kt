@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
                             RegisterScreenFuntion(navController)
                         }
                         composable("home") {
-                            // Passamos o ViewModel para a Home
                             StoreHomeScreen(navController, produtoViewModel)
                         }
                         composable("cart") {

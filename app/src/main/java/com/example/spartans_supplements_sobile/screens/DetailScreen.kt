@@ -106,11 +106,8 @@ fun DetailScreen(
 
                     Button(
                         onClick = {
-                            produto?.let { prod ->
-
-                                viewModel.adicionarAoCarrinho(prod, quantity)
-
-
+                            produto?.let { p ->
+                                viewModel.adicionarAoCarrinho(p.id, quantity)
                                 navController.navigate("cart")
                             }
                         },
