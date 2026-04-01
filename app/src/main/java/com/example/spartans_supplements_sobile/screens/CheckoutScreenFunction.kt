@@ -51,13 +51,14 @@ import kotlinx.coroutines.withContext
 @Composable
 fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostController) {
 
-    val cartItems by viewModel.cartItems.collectAsState()
+    val carrinho by viewModel.carrinho.collectAsState()
+    val itens = carrinho?.itens ?: emptyList()
 
     var endereco by remember { mutableStateOf("") }
     var cep by remember { mutableStateOf("") }
     var metodoPagamento by remember { mutableStateOf("Card") }
 
-    val totalProdutos = cartItems.sumOf { it.price * it.quantity }
+    val totalProdutos = carrinho?.total ?: 0.0
 
     val frete = remember(totalProdutos) {
         if (totalProdutos > 0) {
@@ -104,7 +105,7 @@ fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostCo
         LazyColumn(
             modifier = Modifier.height(200.dp)
         ) {
-            items(cartItems) { item ->
+            items(itens) { item ->
 
                 Row(
                     modifier = Modifier
@@ -115,8 +116,8 @@ fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostCo
 
 
                     AsyncImage(
-                        model = item.imageUrl,
-                        contentDescription = item.name,
+                        model = item.produto.imagemUrl,
+                        contentDescription = item.produto.nome,
                         modifier = Modifier
                             .size(60.dp)
                             .padding(4.dp)
@@ -128,14 +129,15 @@ fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostCo
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
+
                         Text(
-                            text = item.name,
+                            text = item.produto.nome,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
 
                         Text(
-                            text = "Qty: ${item.quantity}",
+                            text = "Qty: ${item.quantidade}",
                             color = Color.Gray,
                             fontSize = 14.sp
                         )
@@ -143,7 +145,7 @@ fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostCo
 
 
                     Text(
-                        text = "$ %.2f".format(item.price * item.quantity),
+                        text = "$ %.2f".format(item.produto.preco * item.quantidade),
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -317,7 +319,7 @@ fun CheckoutScreenFunction(viewModel: ProdutoViewModel, navController: NavHostCo
 
         Button(
             onClick = {
-                println("Finalizando compra com ${cartItems.size} itens")
+                println("Finalizando compra com ${itens.size} itens")
                 navController.navigate("success")
             },
             modifier = Modifier

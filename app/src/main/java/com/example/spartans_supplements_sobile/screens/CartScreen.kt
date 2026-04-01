@@ -59,7 +59,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
                 val totalItensCount = itens.sumOf { it.quantidade }
                 Text(
-                    text = stringResource(R.string.cart_items_count, totalItens),
+                    text = stringResource(R.string.cart_items_count, totalItensCount),
                     color = Color.Gray,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(bottom = 4.dp)
@@ -109,7 +109,6 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                 }
             }
 
-            val totalFinanceiro = cartItems.sumOf { it.price * it.quantity }
             CartSummarySection(totalFinanceiro.toString(), navController)
         }
     }
