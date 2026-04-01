@@ -14,12 +14,13 @@
     <string name="cd_edit">Edit</string>
     <string name="cd_favorite">Favorite</string>
     <string name="cd_cart">Cart</string>
-    <string name="cd_toggle_password">Toggle password visibility</string> <string name="categoria_outros">Others</string>
+    <string name="cd_toggle_password">Toggle password visibility</string>
+    <string name="categoria_outros">Others</string>
     <string name="hero_title">Start simple\nwith everyday\nsupplements</string>
     <string name="hero_subtitle">Whey, creatine and essentials\nfor your first routine.</string>
     <string name="btn_shop_now">Shop now</string>
 
-    <string name="dialog_delete_title"> </string>
+    <string name="dialog_delete_title">Delete Product</string>
     <string name="dialog_delete_text">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
     <string name="dialog_delete_confirm">Yes, delete</string>
     <string name="dialog_delete_cancel">Cancel</string>
@@ -107,5 +108,4 @@
 
     <string name="btn_register_product">Register product</string>
     <string name="btn_save_changes">Save Changes</string>
-
 </resources>

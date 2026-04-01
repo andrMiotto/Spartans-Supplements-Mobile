@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -33,8 +34,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-
-
                     val produtoViewModel: ProdutoViewModel = viewModel()
 
                     NavHost(navController = navController, startDestination = "home") {
@@ -45,11 +44,9 @@ class MainActivity : ComponentActivity() {
                             RegisterScreenFuntion(navController)
                         }
                         composable("home") {
-
                             StoreHomeScreen(navController, produtoViewModel)
                         }
                         composable("cart") {
-
                             CartScreen(navController, produtoViewModel)
                         }
                         composable("register_product") {

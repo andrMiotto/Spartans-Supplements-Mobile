@@ -57,20 +57,12 @@ fun StoreHomeScreen(
 ) {
 
     val produtosDaApi = viewModel.produtos
-
-
     var showDeleteDialog by remember { mutableStateOf(false) }
-
     var productToDelete by remember { mutableStateOf<Product?>(null) }
 
-
-
     LaunchedEffect(Unit) {
-
         while (isActive) {
-
             viewModel.listarProdutos()
-
             delay(5000)
 
         }
@@ -79,79 +71,53 @@ fun StoreHomeScreen(
 
 
     val products = remember(produtosDaApi) {
-
         produtosDaApi.map {
-
             Product(
-
                 id = it.id,
-
                 name = it.nome,
-
                 price = "R$ ${it.preco}",
-
                 imageRes = it.imagemUrl ?: "",
-
                 categoria = it.categoria ?: "Outros"
-
             )
-
         }
-
     }
 
 
     val categorias = remember(products) {
-
         products.groupBy { it.categoria }
-
     }
 
 
 
     if (showDeleteDialog && productToDelete != null) {
-
         AlertDialog(
-
             onDismissRequest = { showDeleteDialog = false },
-
             title = { Text(stringResource(id = R.string.dialog_delete_title)) },
-
             text = {
                 Text(stringResource(id = R.string.dialog_delete_text, productToDelete?.name ?: ""))
             },
+
             confirmButton = {
-
                 TextButton(
-
                     onClick = {
-
                         productToDelete?.let { viewModel.deletarProduto(it.id) }
-
                         showDeleteDialog = false
-
                     }
 
                 ) {
-
                     Text(stringResource(id = R.string.dialog_delete_confirm), color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
                 }
 
             },
 
             dismissButton = {
-
                 TextButton(onClick = { showDeleteDialog = false }) {
-
                     Text(stringResource(id = R.string.dialog_delete_cancel), color = Color.Black)
                 }
-
             },
 
             containerColor = Color.White,
-
             shape = RoundedCornerShape(16.dp)
-
         )
 
     }
