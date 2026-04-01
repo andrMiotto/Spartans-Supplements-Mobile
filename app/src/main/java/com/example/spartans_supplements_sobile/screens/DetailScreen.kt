@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,25 +58,50 @@ fun DetailScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Box(
-                            modifier = Modifier.size(38.dp).clip(CircleShape).background(LightGray),
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(LightGray),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Black, modifier = Modifier.size(20.dp))
+                            Icon(
+                                Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Black,
+                                modifier = Modifier.size(20.dp)
+                            )
                         }
                     }
                 },
                 title = {
-                    Text(text = "Detalhes", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black)
+                    Text(
+                        text = stringResource(R.string.title_details),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Black
+                    )
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("update_product/$id") }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit", tint = Black)
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            tint = Black
+                        )
                     }
                     IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Favorite", tint = Black)
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Favorite",
+                            tint = Black
+                        )
                     }
                     IconButton(onClick = { navController.navigate("cart") }) {
-                        Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = "Cart", tint = Black)
+                        Icon(
+                            imageVector = Icons.Outlined.ShoppingCart,
+                            contentDescription = "Cart",
+                            tint = Black
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = OffWhite)
@@ -85,21 +111,33 @@ fun DetailScreen(
         bottomBar = {
             Surface(color = OffWhite, shadowElevation = 12.dp) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Row(
-                        modifier = Modifier.border(1.5.dp, LightGray, RoundedCornerShape(12.dp)).padding(horizontal = 12.dp, vertical = 10.dp),
+                        modifier = Modifier
+                            .border(1.5.dp, LightGray, RoundedCornerShape(12.dp))
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Text(text = "−", fontSize = 20.sp, fontWeight = FontWeight.Bold,
                             color = if (quantity > 1) Black else MediumGray,
                             modifier = Modifier.clickable { if (quantity > 1) quantity-- })
-                        Text(text = "$quantity", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Black)
-                        Text(text = "+", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Black,
+                        Text(
+                            text = "$quantity",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Black
+                        )
+                        Text(text = "+",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Black,
                             modifier = Modifier.clickable { quantity++ })
                     }
 
@@ -113,9 +151,16 @@ fun DetailScreen(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Black),
                         shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.weight(1f).height(52.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp)
                     ) {
-                        Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(
+                            text = stringResource(R.string.btn_add_to_cart),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
                     }
                 }
             }
@@ -124,15 +169,33 @@ fun DetailScreen(
         containerColor = OffWhite
     ) { paddingValues ->
         if (produto == null) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator(color = Black)
             }
         } else {
-            Column(modifier = Modifier.fillMaxSize().padding(paddingValues).verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(280.dp).background(
-                        Brush.verticalGradient(colors = listOf(Color(0xFFEDEBE6), Color(0xFFF8F7F4)))
-                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(280.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color(0xFFEDEBE6),
+                                    Color(0xFFF8F7F4)
+                                )
+                            )
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     AsyncImage(
@@ -151,34 +214,73 @@ fun DetailScreen(
                         Tag(text = "${produto.peso}kg")
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "SPARTANS", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Red, letterSpacing = 2.sp)
+                    Text(
+                        text = stringResource(R.string.brand_name),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Red,
+                        letterSpacing = 2.sp
+                    )
 
 
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = produto.nome, fontSize = 28.sp, fontWeight = FontWeight.Black, color = Black, lineHeight = 32.sp)
+                    Text(
+                        text = produto.nome,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Black,
+                        lineHeight = 32.sp
+                    )
 
                     Spacer(modifier = Modifier.height(14.dp))
-                    Text(text = "R$ ${"%.2f".format(produto.preco)}", fontSize = 26.sp, fontWeight = FontWeight.Black, color = Black)
+                    Text(
+                        text = stringResource(R.string.price_brl, "%.2f".format(produto.preco)),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Black
+                    )
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    Box(modifier = Modifier.clip(RoundedCornerShape(6.dp))
-                        .background(if (produto.quantidadeEstoque > 0) Color(0xFF2E7D32) else Color.Red)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(if (produto.quantidadeEstoque > 0) Color(0xFF2E7D32) else Color.Red)
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
-                        Text(text = if (produto.quantidadeEstoque > 0) "In Stock: ${produto.quantidadeEstoque}" else "No stock",
-                            fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(
+                            text = if (produto.quantidadeEstoque > 0) stringResource(
+                                R.string.in_stock,
+                                produto.quantidadeEstoque
+                            ) else stringResource(R.string.no_stock),
+                            fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
                     HorizontalDivider(color = LightGray, thickness = 1.dp)
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Description", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(
+                        text = stringResource(R.string.title_description),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Black
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = produto.descricao, fontSize = 14.sp, color = MediumGray, lineHeight = 22.sp)
+                    Text(
+                        text = produto.descricao,
+                        fontSize = 14.sp,
+                        color = MediumGray,
+                        lineHeight = 22.sp
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    Text(text = "Informations", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Black)
+                    Text(
+                        text = stringResource(R.string.title_informations),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Black
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
@@ -186,18 +288,18 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         NutritionCard(
-                            label = "Weight",
-                            value = "${produto.peso}kg",
+                            label = stringResource(R.string.info_calories),
+                            value = "%.0f".format(produto.calorias),
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Stock",
-                            value = "${produto.quantidadeEstoque}",
+                            label = stringResource(R.string.info_carbs),
+                            value = "%.0f".format(produto.carboidratos),
                             modifier = Modifier.weight(1f)
                         )
                         NutritionCard(
-                            label = "Price",
-                            value = "R$${"%.0f".format(produto.preco)}",
+                            label = stringResource(R.string.info_proteins),
+                            value = "%.0f".format(produto.proteinas),
                             modifier = Modifier.weight(1f)
                         )
 
@@ -235,14 +337,28 @@ fun DetailScreen(
 
 @Composable
 private fun Tag(text: String) {
-    Box(modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(TagBg).padding(horizontal = 12.dp, vertical = 5.dp)) {
-        Text(text = text, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = Color(0xFF555555))
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(TagBg)
+            .padding(horizontal = 12.dp, vertical = 5.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF555555)
+        )
     }
 }
 
 @Composable
 private fun NutritionCard(label: String, value: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.clip(RoundedCornerShape(12.dp)).background(TagBg).padding(vertical = 14.dp),
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(TagBg)
+            .padding(vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Text(text = value, fontSize = 20.sp, fontWeight = FontWeight.Black, color = Black)

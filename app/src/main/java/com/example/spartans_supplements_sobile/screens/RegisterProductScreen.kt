@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.spartans_supplements_sobile.R
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 import com.example.spartans_supplements_sobile.model.dto.produto.ProdutoRequest
 
@@ -35,7 +37,7 @@ fun RegisterProductScreen(
     navController: NavHostController,
     viewModel: ProdutoViewModel = viewModel()
 ) {
-    
+
     var nome by remember { mutableStateOf("") }
     var preco by remember { mutableStateOf("") }
     var descricao by remember { mutableStateOf("") }
@@ -53,11 +55,11 @@ fun RegisterProductScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Box(modifier = Modifier.size(38.dp).clip(CircleShape).background(LightGray), contentAlignment = Alignment.Center) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Return", tint = Black)
+                            Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = Black)
                         }
                     }
                 },
-                title = { Text("New Product", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black) },
+                title = { Text(stringResource(id = R.string.title_new_product), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = OffWhite)
             )
         },
@@ -80,7 +82,6 @@ fun RegisterProductScreen(
                             carboidratos = carboidratos.toSafeDouble()
                         )
 
-
                         viewModel.createProduct(novoProduto) {
                             navController.popBackStack()
                         }
@@ -89,9 +90,9 @@ fun RegisterProductScreen(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth().padding(20.dp).height(52.dp)
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
+                    Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.cd_add_product), modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text("Register product", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(id = R.string.btn_register_product), fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
         },
@@ -103,28 +104,28 @@ fun RegisterProductScreen(
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
-            CustomTextField(value = nome, onValueChange = { nome = it }, label = "product name")
+            CustomTextField(value = nome, onValueChange = { nome = it }, label = stringResource(id = R.string.label_form_product_name))
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = preco, onValueChange = { preco = it }, label = "price (R$)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = estoque, onValueChange = { estoque = it }, label = "initial stock", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Number)
+                CustomTextField(value = preco, onValueChange = { preco = it }, label = stringResource(id = R.string.label_form_price), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = estoque, onValueChange = { estoque = it }, label = stringResource(id = R.string.label_form_stock), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Number)
             }
 
-            CustomTextField(value = categoria, onValueChange = { categoria = it }, label = "Category (ex: Proteínas, Creatinas)")
-            CustomTextField(value = descricao, onValueChange = { descricao = it }, label = "Full description", singleLine = false, minLines = 3)
-            CustomTextField(value = imagemUrl, onValueChange = { imagemUrl = it }, label = "Image URL")
+            CustomTextField(value = categoria, onValueChange = { categoria = it }, label = stringResource(id = R.string.label_form_category))
+            CustomTextField(value = descricao, onValueChange = { descricao = it }, label = stringResource(id = R.string.label_form_description), singleLine = false, minLines = 3)
+            CustomTextField(value = imagemUrl, onValueChange = { imagemUrl = it }, label = stringResource(id = R.string.label_form_image))
 
             HorizontalDivider(color = LightGray, modifier = Modifier.padding(vertical = 8.dp))
-            Text("Especificações Técnicas", fontWeight = FontWeight.Bold, color = Black)
+            Text(stringResource(id = R.string.title_tech_specs), fontWeight = FontWeight.Bold, color = Black)
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = peso, onValueChange = { peso = it }, label = "Weight (kg)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = calorias, onValueChange = { calorias = it }, label = "Calories", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = peso, onValueChange = { peso = it }, label = stringResource(id = R.string.label_form_weight), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = calorias, onValueChange = { calorias = it }, label = stringResource(id = R.string.label_form_calories), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CustomTextField(value = proteinas, onValueChange = { proteinas = it }, label = "Proteins (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                CustomTextField(value = carboidratos, onValueChange = { carboidratos = it }, label = "Carbs (g)", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = proteinas, onValueChange = { proteinas = it }, label = stringResource(id = R.string.label_form_proteins), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                CustomTextField(value = carboidratos, onValueChange = { carboidratos = it }, label = stringResource(id = R.string.label_form_carbs), modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
             }
 
             Spacer(modifier = Modifier.height(30.dp))

@@ -1,8 +1,111 @@
 <resources>
-    <string name="app_name">Spartans-Supplements-Sobile</string>
-    <string name="featured_suplements">Featured Suplements</string>
-    <string name="add_to_cart">Add to cart</string>
-    <string name="details">Details</string>
+    <string name="app_name">Spartans Supplements</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_cart">Cart</string>
+    <string name="see_all">See all</string>
+    <string name="price_brl">R$ %1$s</string>
 
+    <string name="cd_logo_icon">Icon</string>
+    <string name="cd_logo_spartans">Spartans Logo</string>
+    <string name="cd_banner">Banner</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_add_product">Add Product</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_favorite">Favorite</string>
+    <string name="cd_cart">Cart</string>
+    <string name="cd_toggle_password">Toggle password visibility</string> <string name="categoria_outros">Others</string>
+    <string name="hero_title">Start simple\nwith everyday\nsupplements</string>
+    <string name="hero_subtitle">Whey, creatine and essentials\nfor your first routine.</string>
+    <string name="btn_shop_now">Shop now</string>
+
+    <string name="dialog_delete_title"> </string>
+    <string name="dialog_delete_text">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
+    <string name="dialog_delete_confirm">Yes, delete</string>
+    <string name="dialog_delete_cancel">Cancel</string>
+
+    <string name="title_details">Details</string>
+    <string name="brand_name">SPARTANS</string>
+    <string name="in_stock">In Stock: %1$d</string>
+    <string name="no_stock">No stock</string>
+    <string name="title_description">Description</string>
+    <string name="title_informations">Information</string>
+    <string name="btn_add_to_cart">Add to cart</string>
+
+    <string name="info_weight">Weight</string>
+    <string name="info_stock">Stock</string>
+    <string name="info_price">Price</string>
+    <string name="info_calories">Calories</string>
+    <string name="info_carbs">Carbs</string>
+    <string name="info_proteins">Proteins</string>
+
+    <string name="title_cart">Cart</string>
+    <string name="cart_items_count">(%1$d items)</string>
+    <string name="cart_empty_msg">Your cart is empty</string>
+    <string name="btn_keep_buying">Keep buying</string>
+    <string name="cart_subtotal">Subtotal</string>
+    <string name="cart_shipping">Shipping</string>
+    <string name="cart_shipping_free">Free</string>
+    <string name="cart_total">Total</string>
+    <string name="btn_checkout">Proceed to Checkout</string>
+
+    <string name="auth_welcome_back">Welcome Back</string>
+    <string name="auth_sign_in_subtitle">Sign in to continue shopping</string>
+    <string name="label_name">Name</string>
+    <string name="placeholder_name">Name</string>
+    <string name="label_email">Email address</string>
+    <string name="placeholder_email">name@example.com</string>
+    <string name="label_phone">Phone</string>
+    <string name="placeholder_phone">+1 000 000-000</string>
+    <string name="label_address">Address</string>
+    <string name="placeholder_address">Street Name, City, State</string>
+    <string name="label_cpf">Tax ID / CPF</string>
+    <string name="placeholder_cpf">000.000.000-00</string>
+    <string name="label_birthdate">Date of Birth</string>
+    <string name="placeholder_birthdate">YYYY-MM-DD</string>
+    <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
+    <string name="placeholder_password">**********</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="auth_no_account">Don\'t have an account? </string>
+
+    <string name="login_welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Sign in to continue shopping</string>
+    <string name="login_email_label">Email address</string>
+    <string name="login_email_placeholder">name@example.com</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_placeholder">**********</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_toast_success">Logged in successfully!</string>
+    <string name="login_toast_error">Incorrect email or password!</string>
+
+    <string name="btn_sign_in">Sign In</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_login">Login</string>
+
+    <string name="toast_login_success">Logged in successfully!</string>
+    <string name="toast_login_error">Incorrect email or password!</string>
+    <string name="toast_register_success">User saved successfully!</string>
+    <string name="toast_register_error">Incorrect data, please follow the example!</string>
+
+    <string name="title_new_product">New Product</string>
+    <string name="title_edit_product">Edit Product</string>
+    <string name="title_tech_specs">Technical Specifications</string>
+
+    <string name="label_form_product_name">Product Name</string>
+    <string name="label_form_price">Price (R$)</string>
+    <string name="label_form_stock">Stock</string>
+    <string name="label_form_category">Category (e.g. Proteins, Creatine)</string>
+    <string name="label_form_description">Description</string>
+    <string name="label_form_image">Image URL</string>
+
+    <string name="label_form_weight">Weight (kg)</string>
+    <string name="label_form_calories">Calories</string>
+    <string name="label_form_proteins">Proteins (g)</string>
+    <string name="label_form_carbs">Carbs (g)</string>
+
+    <string name="btn_register_product">Register product</string>
+    <string name="btn_save_changes">Save Changes</string>
 
 </resources>

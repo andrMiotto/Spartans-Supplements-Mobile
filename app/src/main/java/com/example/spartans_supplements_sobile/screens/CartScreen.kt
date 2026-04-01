@@ -17,11 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.spartans_supplements_sobile.R
 import com.example.spartans_supplements_sobile.ui.viewModel.ProdutoViewModel
 
 @Composable
@@ -48,7 +50,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = "Cart",
+                    text = stringResource(id = R.string.title_cart),
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF1A1C1E)
@@ -57,7 +59,7 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
                 val totalItensCount = itens.sumOf { it.quantidade }
                 Text(
-                    text = "($totalItensCount items)",
+                    text = stringResource(R.string.cart_items_count, totalItens),
                     color = Color.Gray,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(bottom = 4.dp)
@@ -66,21 +68,30 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
 
             if (itens.isEmpty()) {
                 Box(
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.ShoppingCart, null, modifier = Modifier.size(64.dp), tint = Color.LightGray)
+                        Icon(
+                            Icons.Default.ShoppingCart,
+                            contentDescription = stringResource(id = R.string.cd_cart),
+                            modifier = Modifier.size(64.dp),
+                            tint = Color.LightGray
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text("Your cart is empty", fontSize = 18.sp, color = Color.Gray)
+                        Text(stringResource(R.string.cart_empty_msg), fontSize = 18.sp, color = Color.Gray)
                         TextButton(onClick = { navController.navigate("home") }) {
-                            Text("Keep buying", color = Color(0xFF0D6B39))
+                            Text(stringResource(R.string.btn_keep_buying), color = Color(0xFF0D6B39))
                         }
                     }
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier.weight(1f).padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 20.dp)
                 ) {
@@ -98,7 +109,8 @@ fun CartScreen(navController: NavHostController, viewModel: ProdutoViewModel) {
                 }
             }
 
-            CartSummarySection(totalFinanceiro.toString())
+            val totalFinanceiro = cartItems.sumOf { it.price * it.quantity }
+            CartSummarySection(totalFinanceiro.toString(), navController)
         }
     }
 }
@@ -131,12 +143,16 @@ fun CartItemCard(
                 AsyncImage(
                     model = imageUrl,
                     contentDescription = name,
-                    modifier = Modifier.fillMaxSize().padding(8.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
                 )
             }
 
             Column(
-                modifier = Modifier.padding(start = 16.dp).weight(1f)
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -144,7 +160,7 @@ fun CartItemCard(
                 ) {
                     Text(name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
                     IconButton(onClick = onRemove, modifier = Modifier.size(24.dp)) {
-                        Icon(Icons.Default.Delete, "Remove", tint = Color.LightGray)
+                        Icon(Icons.Default.Delete, stringResource(id = R.string.cd_delete), tint = Color.LightGray)
                     }
                 }
 
@@ -156,7 +172,7 @@ fun CartItemCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "R$ ${"%.2f".format(priceTotal)}",
+                        text = stringResource(R.string.price_brl, "%.2f".format(priceTotal)),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp
                     )
@@ -194,7 +210,8 @@ fun CartItemCard(
 }
 
 @Composable
-fun CartSummarySection(totalPrice: String) {
+fun CartSummarySection(totalPrice: String, navController: NavHostController) {
+
     val formattedTotal = "%.2f".format(totalPrice.toDoubleOrNull() ?: 0.0)
 
     Surface(
@@ -204,26 +221,34 @@ fun CartSummarySection(totalPrice: String) {
         shadowElevation = 12.dp
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            SummaryRow("Subtotal", "R$ $formattedTotal")
-            SummaryRow("Shipping", "Free") // Exemplo estático ou vindo do back
+            SummaryRow(stringResource(R.string.cart_subtotal), stringResource(R.string.price_brl, formattedTotal))
+            SummaryRow(stringResource(R.string.cart_shipping), stringResource(R.string.cart_shipping_free))
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), color = Color(0xFFEEEEEE))
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 16.dp),
+                color = Color(0xFFEEEEEE)
+            )
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Total", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("R$ $formattedTotal", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(stringResource(R.string.cart_total), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(stringResource(R.string.price_brl, formattedTotal), fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* Implementar Checkout */ },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                onClick = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D6B39)),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Proceed to Checkout", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.btn_checkout), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.Default.KeyboardArrowRight, null)
                 }
@@ -235,7 +260,9 @@ fun CartSummarySection(totalPrice: String) {
 @Composable
 fun SummaryRow(label: String, value: String) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(label, color = Color.Gray, fontSize = 16.sp)
@@ -247,14 +274,14 @@ fun SummaryRow(label: String, value: String) {
 fun AppBottomNavigationBar(navController: NavHostController) {
     NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, "Home") },
-            label = { Text("Home") },
+            icon = { Icon(Icons.Default.Home, stringResource(R.string.nav_home)) },
+            label = { Text(stringResource(R.string.nav_home)) },
             selected = false,
             onClick = { navController.navigate("home") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.ShoppingCart, "Cart") },
-            label = { Text("Cart") },
+            icon = { Icon(Icons.Default.ShoppingCart, stringResource(R.string.cd_cart)) },
+            label = { Text(stringResource(R.string.nav_cart)) },
             selected = true,
             onClick = {}
         )
